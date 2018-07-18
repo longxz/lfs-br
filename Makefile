@@ -1,7 +1,7 @@
 # declare before package include scripts/generic-package.mk
 
 LFS-SRC=/mnt/lfs/sources
-BUILD_DIR=$(LFS-SRC)/build_dir
+BUILD_DIR=/mnt/lfs/sources
 
 PACKAGES :=
 PACKAGES_ALL :=
@@ -15,7 +15,8 @@ include package/pkg-generic.mk
 
 ifeq ($(CHARPTER),5)
 include package/binutils-2.30/binutils-2.30.mk
-include package/m4-1.4.18/m4-1.4.18.mk
+include package/gcc-7.3.0/gcc-7.3.0.mk
+include package/linux-4.15.3/linux-4.15.3.mk
 endif
 
 ifeq ($(CHARPTER),6)
@@ -35,4 +36,3 @@ world: prepare target-finalize
 .PHONY: all
 all: world
 	@echo "make all"
-

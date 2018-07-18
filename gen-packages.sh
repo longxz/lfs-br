@@ -15,7 +15,7 @@ function gen-package() {
 
 
     mkdir -pv $package_dir/$package
-    rm $package_dir/$package/$package.mk
+    [[ ! -e $package_dir/$package/$package.mk ]] || rm $package_dir/$package/$package.mk
     cp pkg-example.mk  $package_dir/$package/$package.mk
     sed -i "s#PACKAGE-UP-MAGIC#${package_uppercase}#g" $package_dir/$package/$package.mk
     sed -i "s#PACKAGE-MAGIC#${tarball}#g" $package_dir/$package/$package.mk
