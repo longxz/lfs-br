@@ -75,7 +75,6 @@ $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
 $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
 
 # default extract command
-$(info $(2)_SOURCE)
 $(2)_EXTRACT_CMDS ?= \
 	tar xf $$($(2)_SOURCE) --strip-components=$$($(2)_STRIP_COMPONENTS) \
 		-C $$($(2)_DIR)
