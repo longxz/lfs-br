@@ -6,7 +6,7 @@ define COREUTILS_8_29_SOURCE_CMDS
 endef
 
 define COREUTILS_8_29_CONFIGURE_CMDS
-	cd $(COREUTILS_8_29_DIR); ./configure --prefix=/tools
+	cd $(COREUTILS_8_29_DIR); ./configure --prefix=/tools --enable-install-program=hostname
 endef
 
 define COREUTILS_8_29_BUILD_CMDS
@@ -14,7 +14,9 @@ define COREUTILS_8_29_BUILD_CMDS
 endef
 
 define COREUTILS_8_29_INSTALL_TARGET_CMDS
-	cd $(COREUTILS_8_29_DIR); make install
+	cd $(COREUTILS_8_29_DIR); \
+	make RUN_EXPENSIVE_TESTS=yes check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

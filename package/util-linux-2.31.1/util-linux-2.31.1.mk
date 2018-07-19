@@ -6,7 +6,13 @@ define UTIL_LINUX_2_31_1_SOURCE_CMDS
 endef
 
 define UTIL_LINUX_2_31_1_CONFIGURE_CMDS
-	cd $(UTIL_LINUX_2_31_1_DIR); ./configure --prefix=/tools
+	cd $(UTIL_LINUX_2_31_1_DIR); \
+	./configure --prefix=/tools \
+		--without-python \
+		--disable-makeinstall-chown \
+		--without-systemdsystemunitdir \
+		--without-ncurses \
+		PKG_CONFIG=""
 endef
 
 define UTIL_LINUX_2_31_1_BUILD_CMDS

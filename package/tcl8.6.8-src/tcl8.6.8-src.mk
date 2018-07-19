@@ -6,15 +6,23 @@ define TCL8_6_8_SRC_SOURCE_CMDS
 endef
 
 define TCL8_6_8_SRC_CONFIGURE_CMDS
-	cd $(TCL8_6_8_SRC_DIR); ./configure --prefix=/tools
+	cd $(TCL8_6_8_SRC_DIR); \
+	cd unix; \
+	./configure --prefix=/tools
 endef
 
 define TCL8_6_8_SRC_BUILD_CMDS
-	make -C $(TCL8_6_8_SRC_DIR)
+	cd $(TCL8_6_8_SRC_DIR); \
+	make; \
+	TZ=UTC make test;
 endef
 
 define TCL8_6_8_SRC_INSTALL_TARGET_CMDS
-	cd $(TCL8_6_8_SRC_DIR); make install
+	cd $(TCL8_6_8_SRC_DIR); \
+	make install; \
+	chmod -v u+w /tools/lib/libtcl8.6.so; \
+	make install-private-headers; \
+	ln -sv tclsh8.6 /tools/bin/tclsh
 endef
 
 $(eval $(gen-pkg-name))

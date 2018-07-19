@@ -6,7 +6,14 @@ define NCURSES_6_1_SOURCE_CMDS
 endef
 
 define NCURSES_6_1_CONFIGURE_CMDS
-	cd $(NCURSES_6_1_DIR); ./configure --prefix=/tools
+	cd $(NCURSES_6_1_DIR); \
+	sed -i s/mawk// configure; \
+	./configure --prefix=/tools \
+		--with-shared \
+		--without-debug \
+		--without-ada \
+		--enable-widec \
+		--enable-overwrite
 endef
 
 define NCURSES_6_1_BUILD_CMDS

@@ -10,11 +10,13 @@ define DEJAGNU_1_6_1_CONFIGURE_CMDS
 endef
 
 define DEJAGNU_1_6_1_BUILD_CMDS
-	make -C $(DEJAGNU_1_6_1_DIR)
+	@echo "DEJAGNU_1_6_1_BUILD_CMDS"
 endef
 
 define DEJAGNU_1_6_1_INSTALL_TARGET_CMDS
-	cd $(DEJAGNU_1_6_1_DIR); make install
+	cd $(DEJAGNU_1_6_1_DIR); \
+	make install; \
+	make check;
 endef
 
 $(eval $(gen-pkg-name))

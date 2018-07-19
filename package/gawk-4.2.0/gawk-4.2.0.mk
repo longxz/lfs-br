@@ -14,7 +14,9 @@ define GAWK_4_2_0_BUILD_CMDS
 endef
 
 define GAWK_4_2_0_INSTALL_TARGET_CMDS
-	cd $(GAWK_4_2_0_DIR); make install
+	cd $(GAWK_4_2_0_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

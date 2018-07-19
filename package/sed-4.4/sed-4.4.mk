@@ -14,7 +14,9 @@ define SED_4_4_BUILD_CMDS
 endef
 
 define SED_4_4_INSTALL_TARGET_CMDS
-	cd $(SED_4_4_DIR); make install
+	cd $(SED_4_4_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

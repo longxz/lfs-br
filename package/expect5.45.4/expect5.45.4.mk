@@ -6,15 +6,23 @@ define EXPECT5_45_4_SOURCE_CMDS
 endef
 
 define EXPECT5_45_4_CONFIGURE_CMDS
-	cd $(EXPECT5_45_4_DIR); ./configure --prefix=/tools
+	cd $(EXPECT5_45_4_DIR); \
+	cp -v configure{,.orig}; \
+	sed 's:/usr/local/bin:/bin:' configure.orig > configure; \
+	./configure --prefix=/tools \
+		--with-tcl=/tools/lib \
+		--with-tclinclude=/tools/include
 endef
 
 define EXPECT5_45_4_BUILD_CMDS
-	make -C $(EXPECT5_45_4_DIR)
+	cd $(EXPECT5_45_4_DIR); \
+	make
 endef
 
 define EXPECT5_45_4_INSTALL_TARGET_CMDS
-	cd $(EXPECT5_45_4_DIR); make install
+	cd $(EXPECT5_45_4_DIR); \
+	make test; \
+	make SCRIPTS="" install
 endef
 
 $(eval $(gen-pkg-name))

@@ -14,7 +14,9 @@ define DIFFUTILS_3_6_BUILD_CMDS
 endef
 
 define DIFFUTILS_3_6_INSTALL_TARGET_CMDS
-	cd $(DIFFUTILS_3_6_DIR); make install
+	cd $(DIFFUTILS_3_6_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

@@ -6,7 +6,9 @@ define MAKE_4_2_1_SOURCE_CMDS
 endef
 
 define MAKE_4_2_1_CONFIGURE_CMDS
-	cd $(MAKE_4_2_1_DIR); ./configure --prefix=/tools
+	cd $(MAKE_4_2_1_DIR); \
+	sed -i '211,217 d; 219,229 d; 232 d' glob/glob.c; \
+	./configure --prefix=/tools --without-guile
 endef
 
 define MAKE_4_2_1_BUILD_CMDS
@@ -14,7 +16,9 @@ define MAKE_4_2_1_BUILD_CMDS
 endef
 
 define MAKE_4_2_1_INSTALL_TARGET_CMDS
-	cd $(MAKE_4_2_1_DIR); make install
+	cd $(MAKE_4_2_1_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

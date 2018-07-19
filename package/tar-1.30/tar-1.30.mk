@@ -14,7 +14,9 @@ define TAR_1_30_BUILD_CMDS
 endef
 
 define TAR_1_30_INSTALL_TARGET_CMDS
-	cd $(TAR_1_30_DIR); make install
+	cd $(TAR_1_30_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

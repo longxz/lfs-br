@@ -6,7 +6,7 @@ define BASH_4_4_18_SOURCE_CMDS
 endef
 
 define BASH_4_4_18_CONFIGURE_CMDS
-	cd $(BASH_4_4_18_DIR); ./configure --prefix=/tools
+	cd $(BASH_4_4_18_DIR); ./configure --prefix=/tools  --without-bash-malloc
 endef
 
 define BASH_4_4_18_BUILD_CMDS
@@ -14,7 +14,10 @@ define BASH_4_4_18_BUILD_CMDS
 endef
 
 define BASH_4_4_18_INSTALL_TARGET_CMDS
-	cd $(BASH_4_4_18_DIR); make install
+	cd $(BASH_4_4_18_DIR); \
+	make tests; \
+	make install; \
+	ln -sv bash /tools/bin/sh
 endef
 
 $(eval $(gen-pkg-name))

@@ -14,7 +14,9 @@ define BISON_3_0_4_BUILD_CMDS
 endef
 
 define BISON_3_0_4_INSTALL_TARGET_CMDS
-	cd $(BISON_3_0_4_DIR); make install
+	cd $(BISON_3_0_4_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

@@ -14,7 +14,9 @@ define GZIP_1_9_BUILD_CMDS
 endef
 
 define GZIP_1_9_INSTALL_TARGET_CMDS
-	cd $(GZIP_1_9_DIR); make install
+	cd $(GZIP_1_9_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

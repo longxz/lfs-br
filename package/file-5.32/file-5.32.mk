@@ -14,7 +14,9 @@ define FILE_5_32_BUILD_CMDS
 endef
 
 define FILE_5_32_INSTALL_TARGET_CMDS
-	cd $(FILE_5_32_DIR); make install
+	cd $(FILE_5_32_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

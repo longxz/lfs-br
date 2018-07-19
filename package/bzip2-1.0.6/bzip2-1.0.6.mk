@@ -6,7 +6,7 @@ define BZIP2_1_0_6_SOURCE_CMDS
 endef
 
 define BZIP2_1_0_6_CONFIGURE_CMDS
-	cd $(BZIP2_1_0_6_DIR); ./configure --prefix=/tools
+	@echo "BZIP2_1_0_6_CONFIGURE_CMDS"
 endef
 
 define BZIP2_1_0_6_BUILD_CMDS
@@ -14,7 +14,7 @@ define BZIP2_1_0_6_BUILD_CMDS
 endef
 
 define BZIP2_1_0_6_INSTALL_TARGET_CMDS
-	cd $(BZIP2_1_0_6_DIR); make install
+	cd $(BZIP2_1_0_6_DIR); make  PREFIX=/tools install
 endef
 
 $(eval $(gen-pkg-name))

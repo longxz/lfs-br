@@ -14,7 +14,9 @@ define TEXINFO_6_5_BUILD_CMDS
 endef
 
 define TEXINFO_6_5_INSTALL_TARGET_CMDS
-	cd $(TEXINFO_6_5_DIR); make install
+	cd $(TEXINFO_6_5_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))
