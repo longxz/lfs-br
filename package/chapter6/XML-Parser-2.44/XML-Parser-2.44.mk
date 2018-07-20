@@ -6,7 +6,8 @@ define XML_PARSER_2_44_SOURCE_CMDS
 endef
 
 define XML_PARSER_2_44_CONFIGURE_CMDS
-	cd $(XML_PARSER_2_44_DIR); ./configure --prefix=/tools
+	cd $(XML_PARSER_2_44_DIR); \
+	perl Makefile.PL
 endef
 
 define XML_PARSER_2_44_BUILD_CMDS
@@ -14,7 +15,9 @@ define XML_PARSER_2_44_BUILD_CMDS
 endef
 
 define XML_PARSER_2_44_INSTALL_TARGET_CMDS
-	cd $(XML_PARSER_2_44_DIR); make install
+	cd $(XML_PARSER_2_44_DIR); \
+	make test; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

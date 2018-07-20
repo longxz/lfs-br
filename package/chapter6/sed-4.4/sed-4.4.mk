@@ -6,17 +6,24 @@ define SED_4_4_SOURCE_CMDS
 endef
 
 define SED_4_4_CONFIGURE_CMDS
-	cd $(SED_4_4_DIR); ./configure --prefix=/tools
+	cd $(SED_4_4_DIR); \
+	sed -i 's/usr/tools/' build-aux/help2man; \
+	sed -i 's/testsuite.panic-tests.sh//' Makefile.in; \
+	./configure --prefix=/usr --bindir=/bin
 endef
 
 define SED_4_4_BUILD_CMDS
-	make -C $(SED_4_4_DIR)
+	cd $(SED_4_4_DIR); \
+	make; \
+	make html
 endef
 
 define SED_4_4_INSTALL_TARGET_CMDS
 	cd $(SED_4_4_DIR); \
 	make check; \
-	make install
+	make install; \
+	install -d -m755 /usr/share/doc/sed-4.4; \
+	install -m644 doc/sed.html /usr/share/doc/sed-4.4
 endef
 
 $(eval $(gen-pkg-name))

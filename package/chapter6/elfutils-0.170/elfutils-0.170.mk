@@ -6,7 +6,7 @@ define ELFUTILS_0_170_SOURCE_CMDS
 endef
 
 define ELFUTILS_0_170_CONFIGURE_CMDS
-	cd $(ELFUTILS_0_170_DIR); ./configure --prefix=/tools
+	cd $(ELFUTILS_0_170_DIR); ./configure --prefix=/usr
 endef
 
 define ELFUTILS_0_170_BUILD_CMDS

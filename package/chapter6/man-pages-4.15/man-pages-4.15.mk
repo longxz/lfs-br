@@ -6,11 +6,11 @@ define MAN_PAGES_4_15_SOURCE_CMDS
 endef
 
 define MAN_PAGES_4_15_CONFIGURE_CMDS
-	cd $(MAN_PAGES_4_15_DIR); ./configure --prefix=/tools
+	@echo "MAN_PAGES_4_15_CONFIGURE_CMDS"
 endef
 
 define MAN_PAGES_4_15_BUILD_CMDS
-	make -C $(MAN_PAGES_4_15_DIR)
+	@echo "MAN_PAGES_4_15_BUILD_CMDS"
 endef
 
 define MAN_PAGES_4_15_INSTALL_TARGET_CMDS

@@ -6,15 +6,24 @@ define MPFR_4_0_1_SOURCE_CMDS
 endef
 
 define MPFR_4_0_1_CONFIGURE_CMDS
-	cd $(MPFR_4_0_1_DIR); ./configure --prefix=/tools
+	cd $(MPFR_4_0_1_DIR); \
+	./configure --prefix=/usr \
+		--disable-static \
+		--enable-thread-safe \
+		--docdir=/usr/share/doc/mpfr-4.0.1
 endef
 
 define MPFR_4_0_1_BUILD_CMDS
-	make -C $(MPFR_4_0_1_DIR)
+	cd $(MPFR_4_0_1_DIR); \
+	make; \
+	make html
 endef
 
 define MPFR_4_0_1_INSTALL_TARGET_CMDS
-	cd $(MPFR_4_0_1_DIR); make install
+	cd $(MPFR_4_0_1_DIR); \
+	make check; \
+	make install; \
+	make install-html
 endef
 
 $(eval $(gen-pkg-name))

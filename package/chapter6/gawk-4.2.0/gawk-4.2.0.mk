@@ -6,7 +6,9 @@ define GAWK_4_2_0_SOURCE_CMDS
 endef
 
 define GAWK_4_2_0_CONFIGURE_CMDS
-	cd $(GAWK_4_2_0_DIR); ./configure --prefix=/tools
+	cd $(GAWK_4_2_0_DIR); \
+	sed -i 's/extras//' Makefile.in; \
+	./configure --prefix=/usr
 endef
 
 define GAWK_4_2_0_BUILD_CMDS
@@ -16,7 +18,9 @@ endef
 define GAWK_4_2_0_INSTALL_TARGET_CMDS
 	cd $(GAWK_4_2_0_DIR); \
 	make check; \
-	make install
+	make install; \
+	mkdir -v /usr/share/doc/gawk-4.2.0; \
+	cp -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-4.2.0
 endef
 
 $(eval $(gen-pkg-name))

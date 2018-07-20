@@ -8,7 +8,7 @@ endef
 define MAKE_4_2_1_CONFIGURE_CMDS
 	cd $(MAKE_4_2_1_DIR); \
 	sed -i '211,217 d; 219,229 d; 232 d' glob/glob.c; \
-	./configure --prefix=/tools --without-guile
+	./configure --prefix=/usr
 endef
 
 define MAKE_4_2_1_BUILD_CMDS
@@ -17,7 +17,7 @@ endef
 
 define MAKE_4_2_1_INSTALL_TARGET_CMDS
 	cd $(MAKE_4_2_1_DIR); \
-	make check; \
+	make PERL5LIB=$$PWD/tests/ check; \
 	make install
 endef
 

@@ -13,12 +13,14 @@ endef
 
 define TCL8_6_8_SRC_BUILD_CMDS
 	cd $(TCL8_6_8_SRC_DIR); \
+	cd unix; \
 	make; \
 	TZ=UTC make test;
 endef
 
 define TCL8_6_8_SRC_INSTALL_TARGET_CMDS
 	cd $(TCL8_6_8_SRC_DIR); \
+	cd unix; \
 	make install; \
 	chmod -v u+w /tools/lib/libtcl8.6.so; \
 	make install-private-headers; \

@@ -6,15 +6,17 @@ define MESON_0_44_0_SOURCE_CMDS
 endef
 
 define MESON_0_44_0_CONFIGURE_CMDS
-	cd $(MESON_0_44_0_DIR); ./configure --prefix=/tools
+	cd $(MESON_0_44_0_DIR);
 endef
 
 define MESON_0_44_0_BUILD_CMDS
-	make -C $(MESON_0_44_0_DIR)
+	cd $(MESON_0_44_0_DIR); \
+	python3 setup.py build
 endef
 
 define MESON_0_44_0_INSTALL_TARGET_CMDS
-	cd $(MESON_0_44_0_DIR); make install
+	cd $(MESON_0_44_0_DIR); \
+	python3 setup.py install
 endef
 
 $(eval $(gen-pkg-name))

@@ -6,7 +6,7 @@ define LIBPIPELINE_1_5_0_SOURCE_CMDS
 endef
 
 define LIBPIPELINE_1_5_0_CONFIGURE_CMDS
-	cd $(LIBPIPELINE_1_5_0_DIR); ./configure --prefix=/tools
+	cd $(LIBPIPELINE_1_5_0_DIR); ./configure --prefix=/usr
 endef
 
 define LIBPIPELINE_1_5_0_BUILD_CMDS
@@ -14,7 +14,9 @@ define LIBPIPELINE_1_5_0_BUILD_CMDS
 endef
 
 define LIBPIPELINE_1_5_0_INSTALL_TARGET_CMDS
-	cd $(LIBPIPELINE_1_5_0_DIR); make install
+	cd $(LIBPIPELINE_1_5_0_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

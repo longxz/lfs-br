@@ -6,7 +6,7 @@ define GPERF_3_1_SOURCE_CMDS
 endef
 
 define GPERF_3_1_CONFIGURE_CMDS
-	cd $(GPERF_3_1_DIR); ./configure --prefix=/tools
+	cd $(GPERF_3_1_DIR); ./configure --prefix=/usr --docdir=/usr/share/doc/gperf-3.1
 endef
 
 define GPERF_3_1_BUILD_CMDS
@@ -14,7 +14,9 @@ define GPERF_3_1_BUILD_CMDS
 endef
 
 define GPERF_3_1_INSTALL_TARGET_CMDS
-	cd $(GPERF_3_1_DIR); make install
+	cd $(GPERF_3_1_DIR); \
+	make -j1 check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

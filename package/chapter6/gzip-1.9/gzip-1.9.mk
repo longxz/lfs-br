@@ -6,7 +6,7 @@ define GZIP_1_9_SOURCE_CMDS
 endef
 
 define GZIP_1_9_CONFIGURE_CMDS
-	cd $(GZIP_1_9_DIR); ./configure --prefix=/tools
+	cd $(GZIP_1_9_DIR); ./configure --prefix=/usr
 endef
 
 define GZIP_1_9_BUILD_CMDS
@@ -16,7 +16,8 @@ endef
 define GZIP_1_9_INSTALL_TARGET_CMDS
 	cd $(GZIP_1_9_DIR); \
 	make check; \
-	make install
+	make install; \
+	mv -v /usr/bin/gzip /bin
 endef
 
 $(eval $(gen-pkg-name))

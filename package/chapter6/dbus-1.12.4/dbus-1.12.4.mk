@@ -6,7 +6,7 @@ define DBUS_1_12_4_SOURCE_CMDS
 endef
 
 define DBUS_1_12_4_CONFIGURE_CMDS
-	cd $(DBUS_1_12_4_DIR); ./configure --prefix=/tools
+	cd $(DBUS_1_12_4_DIR); ./configure --prefix=/usr
 endef
 
 define DBUS_1_12_4_BUILD_CMDS

@@ -6,7 +6,13 @@ define ATTR_2_4_47_SRC_SOURCE_CMDS
 endef
 
 define ATTR_2_4_47_SRC_CONFIGURE_CMDS
-	cd $(ATTR_2_4_47_SRC_DIR); ./configure --prefix=/tools
+	cd $(ATTR_2_4_47_SRC_DIR); \
+	sed -i -e 's|/@pkg_name@|&-@pkg_version@|' include/builddefs.in; \
+	sed -i -e "/SUBDIRS/s|man[25]||g" man/Makefile; \
+	sed -i 's:{(:\\{(:' test/run; \
+	./configure --prefix=/usr \
+		--bindir=/bin \
+		--disable-static
 endef
 
 define ATTR_2_4_47_SRC_BUILD_CMDS
@@ -14,7 +20,12 @@ define ATTR_2_4_47_SRC_BUILD_CMDS
 endef
 
 define ATTR_2_4_47_SRC_INSTALL_TARGET_CMDS
-	cd $(ATTR_2_4_47_SRC_DIR); make install
+	cd $(ATTR_2_4_47_SRC_DIR); \
+	make -j1 tests root-tests; \
+	make install install-dev install-lib; \
+	chmod -v 755 /usr/lib/libattr.so; \
+	mv -v /usr/lib/libattr.so.* /lib; \
+	ln -sfv ../../lib/$$(readlink /usr/lib/libattr.so) /usr/lib/libattr.so
 endef
 
 $(eval $(gen-pkg-name))

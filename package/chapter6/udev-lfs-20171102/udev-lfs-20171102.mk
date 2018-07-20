@@ -6,7 +6,7 @@ define UDEV_LFS_20171102_SOURCE_CMDS
 endef
 
 define UDEV_LFS_20171102_CONFIGURE_CMDS
-	cd $(UDEV_LFS_20171102_DIR); ./configure --prefix=/tools
+	cd $(UDEV_LFS_20171102_DIR); ./configure --prefix=/usr
 endef
 
 define UDEV_LFS_20171102_BUILD_CMDS

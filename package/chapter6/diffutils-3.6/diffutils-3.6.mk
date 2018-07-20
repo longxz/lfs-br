@@ -6,7 +6,7 @@ define DIFFUTILS_3_6_SOURCE_CMDS
 endef
 
 define DIFFUTILS_3_6_CONFIGURE_CMDS
-	cd $(DIFFUTILS_3_6_DIR); ./configure --prefix=/tools
+	cd $(DIFFUTILS_3_6_DIR); ./configure --prefix=/usr
 endef
 
 define DIFFUTILS_3_6_BUILD_CMDS

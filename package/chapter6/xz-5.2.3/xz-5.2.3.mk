@@ -6,7 +6,10 @@ define XZ_5_2_3_SOURCE_CMDS
 endef
 
 define XZ_5_2_3_CONFIGURE_CMDS
-	cd $(XZ_5_2_3_DIR); ./configure --prefix=/tools
+	cd $(XZ_5_2_3_DIR); \
+	./configure --prefix=/usr \
+		--disable-static \
+		--docdir=/usr/share/doc/xz-5.2.3
 endef
 
 define XZ_5_2_3_BUILD_CMDS
@@ -16,7 +19,10 @@ endef
 define XZ_5_2_3_INSTALL_TARGET_CMDS
 	cd $(XZ_5_2_3_DIR); \
 	make check; \
-	make install
+	make install; \
+	mv -v /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin; \
+	mv -v /usr/lib/liblzma.so.* /lib; \
+	ln -svf ../../lib/$$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
 endef
 
 $(eval $(gen-pkg-name))

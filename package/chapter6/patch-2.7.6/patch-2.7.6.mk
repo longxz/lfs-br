@@ -6,7 +6,7 @@ define PATCH_2_7_6_SOURCE_CMDS
 endef
 
 define PATCH_2_7_6_CONFIGURE_CMDS
-	cd $(PATCH_2_7_6_DIR); ./configure --prefix=/tools
+	cd $(PATCH_2_7_6_DIR); ./configure --prefix=/usr
 endef
 
 define PATCH_2_7_6_BUILD_CMDS

@@ -6,7 +6,8 @@ define LESS_530_SOURCE_CMDS
 endef
 
 define LESS_530_CONFIGURE_CMDS
-	cd $(LESS_530_DIR); ./configure --prefix=/tools
+	cd $(LESS_530_DIR); \
+	./configure --prefix=/usr --sysconfdir=/etc
 endef
 
 define LESS_530_BUILD_CMDS

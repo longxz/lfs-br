@@ -6,7 +6,9 @@ define EXPAT_2_2_5_SOURCE_CMDS
 endef
 
 define EXPAT_2_2_5_CONFIGURE_CMDS
-	cd $(EXPAT_2_2_5_DIR); ./configure --prefix=/tools
+	cd $(EXPAT_2_2_5_DIR); \
+	sed -i 's|usr/bin/env |bin/|' run.sh.in; \
+	./configure --prefix=/usr --disable-static
 endef
 
 define EXPAT_2_2_5_BUILD_CMDS
@@ -14,7 +16,11 @@ define EXPAT_2_2_5_BUILD_CMDS
 endef
 
 define EXPAT_2_2_5_INSTALL_TARGET_CMDS
-	cd $(EXPAT_2_2_5_DIR); make install
+	cd $(EXPAT_2_2_5_DIR); \
+	make check; \
+	make install; \
+	install -v -dm755 /usr/share/doc/expat-2.2.5; \
+	install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.2.5
 endef
 
 $(eval $(gen-pkg-name))

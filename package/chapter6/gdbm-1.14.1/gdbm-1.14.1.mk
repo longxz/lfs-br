@@ -6,7 +6,10 @@ define GDBM_1_14_1_SOURCE_CMDS
 endef
 
 define GDBM_1_14_1_CONFIGURE_CMDS
-	cd $(GDBM_1_14_1_DIR); ./configure --prefix=/tools
+	cd $(GDBM_1_14_1_DIR); \
+	./configure --prefix=/usr \
+		--disable-static \
+		--enable-libgdbm-compat
 endef
 
 define GDBM_1_14_1_BUILD_CMDS
@@ -14,7 +17,9 @@ define GDBM_1_14_1_BUILD_CMDS
 endef
 
 define GDBM_1_14_1_INSTALL_TARGET_CMDS
-	cd $(GDBM_1_14_1_DIR); make install
+	cd $(GDBM_1_14_1_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

@@ -6,7 +6,7 @@ define FILE_5_32_SOURCE_CMDS
 endef
 
 define FILE_5_32_CONFIGURE_CMDS
-	cd $(FILE_5_32_DIR); ./configure --prefix=/tools
+	cd $(FILE_5_32_DIR); ./configure --prefix=/usr
 endef
 
 define FILE_5_32_BUILD_CMDS

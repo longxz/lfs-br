@@ -6,7 +6,11 @@ define PKG_CONFIG_0_29_2_SOURCE_CMDS
 endef
 
 define PKG_CONFIG_0_29_2_CONFIGURE_CMDS
-	cd $(PKG_CONFIG_0_29_2_DIR); ./configure --prefix=/tools
+	cd $(PKG_CONFIG_0_29_2_DIR); \
+	./configure --prefix=/usr \
+		--with-internal-glib \
+		--disable-host-tool \
+		--docdir=/usr/share/doc/pkg-config-0.29.2
 endef
 
 define PKG_CONFIG_0_29_2_BUILD_CMDS
@@ -14,7 +18,9 @@ define PKG_CONFIG_0_29_2_BUILD_CMDS
 endef
 
 define PKG_CONFIG_0_29_2_INSTALL_TARGET_CMDS
-	cd $(PKG_CONFIG_0_29_2_DIR); make install
+	cd $(PKG_CONFIG_0_29_2_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

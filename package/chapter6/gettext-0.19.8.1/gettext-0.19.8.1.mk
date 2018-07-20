@@ -7,22 +7,22 @@ endef
 
 define GETTEXT_0_19_8_1_CONFIGURE_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
-	cd gettext-tools; \
-	EMACS="no" ./configure --prefix=/tools --disable-shared./configure --prefix=/tools
+	sed -i '/^TESTS =/d' gettext-runtime/tests/Makefile.in && sed -i 's/test-lock..EXEEXT.//' \
+	./configure --prefix=/usr \
+	--disable-static \
+	--docdir=/usr/share/doc/gettext-0.19.8.1
 endef
 
 define GETTEXT_0_19_8_1_BUILD_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
-	make -C gnulib-lib; \
-	make -C intl pluralx.c; \
-	make -C src msgfmt; \
-	make -C src msgmerge; \
-	make -C src xgettext
+	make
 endef
 
 define GETTEXT_0_19_8_1_INSTALL_TARGET_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
-	cp -v src/{msgfmt,msgmerge,xgettext} /tools/bin
+	make check; \
+	make install; \
+	chmod -v 0755 /usr/lib/preloadable_libintl.so
 endef
 
 $(eval $(gen-pkg-name))

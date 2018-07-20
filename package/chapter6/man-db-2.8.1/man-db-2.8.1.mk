@@ -6,7 +6,16 @@ define MAN_DB_2_8_1_SOURCE_CMDS
 endef
 
 define MAN_DB_2_8_1_CONFIGURE_CMDS
-	cd $(MAN_DB_2_8_1_DIR); ./configure --prefix=/tools
+	cd $(MAN_DB_2_8_1_DIR); \
+	./configure --prefix=/usr \
+		--docdir=/usr/share/doc/man-db-2.8.1 \
+		--sysconfdir=/etc \
+		--disable-setuid \
+		--enable-cache-owner=bin \
+		--with-browser=/usr/bin/lynx \
+		--with-vgrind=/usr/bin/vgrind \
+		--with-grap=/usr/bin/grap \
+		--with-systemdtmpfilesdir=
 endef
 
 define MAN_DB_2_8_1_BUILD_CMDS
@@ -14,7 +23,9 @@ define MAN_DB_2_8_1_BUILD_CMDS
 endef
 
 define MAN_DB_2_8_1_INSTALL_TARGET_CMDS
-	cd $(MAN_DB_2_8_1_DIR); make install
+	cd $(MAN_DB_2_8_1_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

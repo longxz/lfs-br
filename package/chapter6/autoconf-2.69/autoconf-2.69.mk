@@ -6,7 +6,7 @@ define AUTOCONF_2_69_SOURCE_CMDS
 endef
 
 define AUTOCONF_2_69_CONFIGURE_CMDS
-	cd $(AUTOCONF_2_69_DIR); ./configure --prefix=/tools
+	cd $(AUTOCONF_2_69_DIR); ./configure --prefix=/usr
 endef
 
 define AUTOCONF_2_69_BUILD_CMDS
@@ -14,7 +14,9 @@ define AUTOCONF_2_69_BUILD_CMDS
 endef
 
 define AUTOCONF_2_69_INSTALL_TARGET_CMDS
-	cd $(AUTOCONF_2_69_DIR); make install
+	cd $(AUTOCONF_2_69_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

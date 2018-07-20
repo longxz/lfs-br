@@ -6,7 +6,13 @@ define PROCPS_NG_3_3_12_SOURCE_CMDS
 endef
 
 define PROCPS_NG_3_3_12_CONFIGURE_CMDS
-	cd $(PROCPS_NG_3_3_12_DIR); ./configure --prefix=/tools
+	cd $(PROCPS_NG_3_3_12_DIR); \
+	./configure --prefix=/usr \
+	--exec-prefix= \
+	--libdir=/usr/lib \
+	--docdir=/usr/share/doc/procps-ng-3.3.12 \
+	--disable-static \
+	--disable-kill
 endef
 
 define PROCPS_NG_3_3_12_BUILD_CMDS
@@ -14,7 +20,14 @@ define PROCPS_NG_3_3_12_BUILD_CMDS
 endef
 
 define PROCPS_NG_3_3_12_INSTALL_TARGET_CMDS
-	cd $(PROCPS_NG_3_3_12_DIR); make install
+	cd $(PROCPS_NG_3_3_12_DIR); \
+	sed -i -r 's|(pmap_initname)\\\$$|\1|'; \ testsuite/pmap.test/pmap.exp; \
+	sed -i '/set tty/d' testsuite/pkill.test/pkill.exp; \
+	rm testsuite/pgrep.test/pgrep.exp; \
+	make check; \
+	make install; \
+	mv -v /usr/lib/libprocps.so.* /lib; \
+	ln -sfv ../../lib/$$(readlink /usr/lib/libprocps.so) /usr/lib/libprocps.so
 endef
 
 $(eval $(gen-pkg-name))

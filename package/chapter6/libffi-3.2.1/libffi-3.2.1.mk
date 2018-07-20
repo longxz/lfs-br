@@ -6,7 +6,13 @@ define LIBFFI_3_2_1_SOURCE_CMDS
 endef
 
 define LIBFFI_3_2_1_CONFIGURE_CMDS
-	cd $(LIBFFI_3_2_1_DIR); ./configure --prefix=/tools
+	cd $(LIBFFI_3_2_1_DIR); \
+	sed -e '/^includesdir/ s/$$(libdir).*$$/$$(includedir)/' \
+ 		-i include/Makefile.in; \
+	sed -e '/^includedir/ s/=.*$$/=@includedir@/' \
+ 		-e 's/^Cflags: -I$${includedir}/Cflags:/' \
+ 		-i libffi.pc.in; \
+	./configure --prefix=/usr --disable-static
 endef
 
 define LIBFFI_3_2_1_BUILD_CMDS
@@ -14,7 +20,9 @@ define LIBFFI_3_2_1_BUILD_CMDS
 endef
 
 define LIBFFI_3_2_1_INSTALL_TARGET_CMDS
-	cd $(LIBFFI_3_2_1_DIR); make install
+	cd $(LIBFFI_3_2_1_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

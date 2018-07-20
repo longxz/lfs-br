@@ -6,7 +6,13 @@ define KMOD_25_SOURCE_CMDS
 endef
 
 define KMOD_25_CONFIGURE_CMDS
-	cd $(KMOD_25_DIR); ./configure --prefix=/tools
+	cd $(KMOD_25_DIR); \
+	./configure --prefix=/usr \
+		--bindir=/bin \
+		--sysconfdir=/etc \
+		--with-rootlibdir=/lib \
+		--with-xz \
+		--with-zlib
 endef
 
 define KMOD_25_BUILD_CMDS
@@ -14,7 +20,12 @@ define KMOD_25_BUILD_CMDS
 endef
 
 define KMOD_25_INSTALL_TARGET_CMDS
-	cd $(KMOD_25_DIR); make install
+	cd $(KMOD_25_DIR); \
+	make install; \
+	for target in depmod insmod lsmod modinfo modprobe rmmod; do \
+		ln -sfv ../bin/kmod /sbin/$$target \
+	done; \
+	ln -sfv kmod /bin/lsmod \
 endef
 
 $(eval $(gen-pkg-name))

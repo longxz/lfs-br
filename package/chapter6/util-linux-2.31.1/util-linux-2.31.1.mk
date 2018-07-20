@@ -7,12 +7,20 @@ endef
 
 define UTIL_LINUX_2_31_1_CONFIGURE_CMDS
 	cd $(UTIL_LINUX_2_31_1_DIR); \
-	./configure --prefix=/tools \
+	mkdir -pv /var/lib/hwclock; \
+	./configure ADJTIME_PATH=/var/lib/hwclock/adjtime \
+		--docdir=/usr/share/doc/util-linux-2.31.1 \
+		--disable-chfn-chsh \
+		--disable-login \
+		--disable-nologin \
+		--disable-su \
+		--disable-setpriv \
+		--disable-runuser \
+		--disable-pylibmount \
+		--disable-static \
 		--without-python \
-		--disable-makeinstall-chown \
-		--without-systemdsystemunitdir \
-		--without-ncurses \
-		PKG_CONFIG=""
+		--without-systemd \
+		--without-systemdsystemunitdir
 endef
 
 define UTIL_LINUX_2_31_1_BUILD_CMDS
@@ -20,7 +28,10 @@ define UTIL_LINUX_2_31_1_BUILD_CMDS
 endef
 
 define UTIL_LINUX_2_31_1_INSTALL_TARGET_CMDS
-	cd $(UTIL_LINUX_2_31_1_DIR); make install
+	cd $(UTIL_LINUX_2_31_1_DIR); \
+	chown -Rv nobody .; \
+	su nobody -s /bin/bash -c "PATH=$$PATH make -k check"; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

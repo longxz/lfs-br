@@ -6,7 +6,12 @@ define GRUB_2_02_SOURCE_CMDS
 endef
 
 define GRUB_2_02_CONFIGURE_CMDS
-	cd $(GRUB_2_02_DIR); ./configure --prefix=/tools
+	cd $(GRUB_2_02_DIR); \
+	./configure --prefix=/usr \
+		--sbindir=/sbin \
+		--sysconfdir=/etc \
+		--disable-efiemu \
+		--disable-werror
 endef
 
 define GRUB_2_02_BUILD_CMDS

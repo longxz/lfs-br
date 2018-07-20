@@ -6,7 +6,10 @@ define FLEX_2_6_4_SOURCE_CMDS
 endef
 
 define FLEX_2_6_4_CONFIGURE_CMDS
-	cd $(FLEX_2_6_4_DIR); ./configure --prefix=/tools
+	cd $(FLEX_2_6_4_DIR); \
+	sed -i "/math.h/a #include <malloc.h>" src/flexdef.h; \
+	HELP2MAN=/tools/bin/true; \
+	./configure --prefix=/usr --docdir=/usr/share/doc/flex-2.6.4
 endef
 
 define FLEX_2_6_4_BUILD_CMDS
@@ -14,7 +17,10 @@ define FLEX_2_6_4_BUILD_CMDS
 endef
 
 define FLEX_2_6_4_INSTALL_TARGET_CMDS
-	cd $(FLEX_2_6_4_DIR); make install
+	cd $(FLEX_2_6_4_DIR); \
+	make check; \
+	make install; \
+	ln -sv flex /usr/bin/lex
 endef
 
 $(eval $(gen-pkg-name))

@@ -6,7 +6,7 @@ define IANA_ETC_2_30_SOURCE_CMDS
 endef
 
 define IANA_ETC_2_30_CONFIGURE_CMDS
-	cd $(IANA_ETC_2_30_DIR); ./configure --prefix=/tools
+	@echo "IANA_ETC_2_30_CONFIGURE_CMDS"
 endef
 
 define IANA_ETC_2_30_BUILD_CMDS

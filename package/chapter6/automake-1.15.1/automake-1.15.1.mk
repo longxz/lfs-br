@@ -6,7 +6,8 @@ define AUTOMAKE_1_15_1_SOURCE_CMDS
 endef
 
 define AUTOMAKE_1_15_1_CONFIGURE_CMDS
-	cd $(AUTOMAKE_1_15_1_DIR); ./configure --prefix=/tools
+	cd $(AUTOMAKE_1_15_1_DIR); \
+	./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.15.1
 endef
 
 define AUTOMAKE_1_15_1_BUILD_CMDS
@@ -14,7 +15,10 @@ define AUTOMAKE_1_15_1_BUILD_CMDS
 endef
 
 define AUTOMAKE_1_15_1_INSTALL_TARGET_CMDS
-	cd $(AUTOMAKE_1_15_1_DIR); make install
+	cd $(AUTOMAKE_1_15_1_DIR); \
+	sed -i "s:./configure:LEXLIB=/usr/lib/libfl.a &:" t/lex-{clean,depend}-cxx.sh; \
+	make -j4 check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

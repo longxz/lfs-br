@@ -6,7 +6,7 @@ define CHECK_0_12_0_SOURCE_CMDS
 endef
 
 define CHECK_0_12_0_CONFIGURE_CMDS
-	cd $(CHECK_0_12_0_DIR); ./configure --prefix=/tools
+	cd $(CHECK_0_12_0_DIR); ./configure --prefix=/usr
 endef
 
 define CHECK_0_12_0_BUILD_CMDS
@@ -14,7 +14,9 @@ define CHECK_0_12_0_BUILD_CMDS
 endef
 
 define CHECK_0_12_0_INSTALL_TARGET_CMDS
-	cd $(CHECK_0_12_0_DIR); make install
+	cd $(CHECK_0_12_0_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

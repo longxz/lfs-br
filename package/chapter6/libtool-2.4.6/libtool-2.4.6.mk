@@ -6,7 +6,7 @@ define LIBTOOL_2_4_6_SOURCE_CMDS
 endef
 
 define LIBTOOL_2_4_6_CONFIGURE_CMDS
-	cd $(LIBTOOL_2_4_6_DIR); ./configure --prefix=/tools
+	cd $(LIBTOOL_2_4_6_DIR); ./configure --prefix=/usr
 endef
 
 define LIBTOOL_2_4_6_BUILD_CMDS
@@ -14,7 +14,9 @@ define LIBTOOL_2_4_6_BUILD_CMDS
 endef
 
 define LIBTOOL_2_4_6_INSTALL_TARGET_CMDS
-	cd $(LIBTOOL_2_4_6_DIR); make install
+	cd $(LIBTOOL_2_4_6_DIR); \
+	make check; \
+	make install
 endef
 
 $(eval $(gen-pkg-name))

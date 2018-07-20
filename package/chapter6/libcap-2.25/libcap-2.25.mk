@@ -6,7 +6,8 @@ define LIBCAP_2_25_SOURCE_CMDS
 endef
 
 define LIBCAP_2_25_CONFIGURE_CMDS
-	cd $(LIBCAP_2_25_DIR); ./configure --prefix=/tools
+	cd $(LIBCAP_2_25_DIR); \
+	sed -i '/install.*STALIBNAME/d' libcap/Makefile; \
 endef
 
 define LIBCAP_2_25_BUILD_CMDS
@@ -14,7 +15,11 @@ define LIBCAP_2_25_BUILD_CMDS
 endef
 
 define LIBCAP_2_25_INSTALL_TARGET_CMDS
-	cd $(LIBCAP_2_25_DIR); make install
+	cd $(LIBCAP_2_25_DIR); \
+	make RAISE_SETFCAP=no lib=lib prefix=/usr install; \
+	chmod -v 755 /usr/lib/libcap.so; \
+	mv -v /usr/lib/libcap.so.* /lib; \
+	ln -sfv ../../lib/$$(readlink /usr/lib/libcap.so) /usr/lib/libcap.so
 endef
 
 $(eval $(gen-pkg-name))

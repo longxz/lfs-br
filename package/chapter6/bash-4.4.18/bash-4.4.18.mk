@@ -6,7 +6,11 @@ define BASH_4_4_18_SOURCE_CMDS
 endef
 
 define BASH_4_4_18_CONFIGURE_CMDS
-	cd $(BASH_4_4_18_DIR); ./configure --prefix=/tools  --without-bash-malloc
+	cd $(BASH_4_4_18_DIR); \
+	./configure --prefix=/usr \
+		--docdir=/usr/share/doc/bash-4.4.18 \
+		--without-bash-malloc \
+		--with-installed-readline
 endef
 
 define BASH_4_4_18_BUILD_CMDS
@@ -15,9 +19,11 @@ endef
 
 define BASH_4_4_18_INSTALL_TARGET_CMDS
 	cd $(BASH_4_4_18_DIR); \
-	make tests; \
+	chown -Rv nobody .; \
+	su nobody -s /bin/bash -c "PATH=$PATH make tests"; \
 	make install; \
-	ln -sv bash /tools/bin/sh
+	mv -vf /usr/bin/bash /bin; \
+	exec /bin/bash --login +h
 endef
 
 $(eval $(gen-pkg-name))

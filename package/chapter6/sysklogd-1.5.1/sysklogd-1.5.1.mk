@@ -6,7 +6,9 @@ define SYSKLOGD_1_5_1_SOURCE_CMDS
 endef
 
 define SYSKLOGD_1_5_1_CONFIGURE_CMDS
-	cd $(SYSKLOGD_1_5_1_DIR); ./configure --prefix=/tools
+	cd $(SYSKLOGD_1_5_1_DIR); \
+	sed -i '/Error loading kernel symbols/{n;n;d}' ksym_mod.c; \
+	sed -i 's/union wait/int/' syslogd.c; \
 endef
 
 define SYSKLOGD_1_5_1_BUILD_CMDS
@@ -14,7 +16,17 @@ define SYSKLOGD_1_5_1_BUILD_CMDS
 endef
 
 define SYSKLOGD_1_5_1_INSTALL_TARGET_CMDS
-	cd $(SYSKLOGD_1_5_1_DIR); make install
+	cd $(SYSKLOGD_1_5_1_DIR); \
+	make BINDIR=/sbin install; \
+
+	# Configuring Sysklogd
+	echo '# Begin /etc/syslog.conf\n \
+		auth,authpriv.* -/var/log/auth.log\n \
+		*.*;auth,authpriv.none -/var/log/sys.log\n \
+		daemon.* -/var/log/daemon.log\nkern.* -/var/log/kern.log\n \
+		mail.* -/var/log/mail.log\nuser.* \
+		-/var/log/user.log\n*.emerg *\n\n \
+		# End /etc/syslog.conf' > /etc/syslog.conf
 endef
 
 $(eval $(gen-pkg-name))

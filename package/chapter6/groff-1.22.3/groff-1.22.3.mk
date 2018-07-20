@@ -6,11 +6,13 @@ define GROFF_1_22_3_SOURCE_CMDS
 endef
 
 define GROFF_1_22_3_CONFIGURE_CMDS
-	cd $(GROFF_1_22_3_DIR); ./configure --prefix=/tools
+	cd $(GROFF_1_22_3_DIR); \
+	PAGE=<paper_size> ./configure --prefix=/usr
 endef
 
 define GROFF_1_22_3_BUILD_CMDS
-	make -C $(GROFF_1_22_3_DIR)
+	cd $(GROFF_1_22_3_DIR); \
+	make -j1
 endef
 
 define GROFF_1_22_3_INSTALL_TARGET_CMDS

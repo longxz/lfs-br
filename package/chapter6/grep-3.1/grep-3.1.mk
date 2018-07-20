@@ -6,7 +6,7 @@ define GREP_3_1_SOURCE_CMDS
 endef
 
 define GREP_3_1_CONFIGURE_CMDS
-	cd $(GREP_3_1_DIR); ./configure --prefix=/tools
+	cd $(GREP_3_1_DIR); ./configure --prefix=/usr --bindir=/bin
 endef
 
 define GREP_3_1_BUILD_CMDS

@@ -6,7 +6,16 @@ define INETUTILS_1_9_4_SOURCE_CMDS
 endef
 
 define INETUTILS_1_9_4_CONFIGURE_CMDS
-	cd $(INETUTILS_1_9_4_DIR); ./configure --prefix=/tools
+	cd $(INETUTILS_1_9_4_DIR); \
+	./configure --prefix=/usr \
+		--localstatedir=/var \
+		--disable-logger \
+		--disable-whois \
+		--disable-rcp \
+		--disable-rexec \
+		--disable-rlogin \
+		--disable-rsh \
+		--disable-servers
 endef
 
 define INETUTILS_1_9_4_BUILD_CMDS
@@ -14,7 +23,11 @@ define INETUTILS_1_9_4_BUILD_CMDS
 endef
 
 define INETUTILS_1_9_4_INSTALL_TARGET_CMDS
-	cd $(INETUTILS_1_9_4_DIR); make install
+	cd $(INETUTILS_1_9_4_DIR); \
+	make check; \
+	make install; \
+	mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin; \
+	mv -v /usr/bin/ifconfig /sbin
 endef
 
 $(eval $(gen-pkg-name))

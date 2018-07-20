@@ -6,7 +6,7 @@ define ZLIB_1_2_11_SOURCE_CMDS
 endef
 
 define ZLIB_1_2_11_CONFIGURE_CMDS
-	cd $(ZLIB_1_2_11_DIR); ./configure --prefix=/tools
+	cd $(ZLIB_1_2_11_DIR); ./configure --prefix=/usr
 endef
 
 define ZLIB_1_2_11_BUILD_CMDS
@@ -14,7 +14,11 @@ define ZLIB_1_2_11_BUILD_CMDS
 endef
 
 define ZLIB_1_2_11_INSTALL_TARGET_CMDS
-	cd $(ZLIB_1_2_11_DIR); make install
+	cd $(ZLIB_1_2_11_DIR); \
+	make check; \
+	make install; \
+	mv -v /usr/lib/libz.so.* /lib; \
+	ln -sfv ../../lib/$$(readlink /usr/lib/libz.so) /usr/lib/libz.so
 endef
 
 $(eval $(gen-pkg-name))

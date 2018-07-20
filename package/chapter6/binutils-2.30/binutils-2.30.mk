@@ -8,30 +8,30 @@ endef
 
 define BINUTILS_2_30_CONFIGURE_CMDS
 	cd $(BINUTILS_2_30_DIR); \
+	expect -c "spawn ls"; \
 	mkdir -v build; \
 	cd build; \
-	../configure --prefix=/tools \
-		--with-sysroot=$$LFS \
-		--with-lib-path=/tools/lib \
-		--target=$$LFS_TGT \
-		--disable-nls \
-		--disable-werror
+	../configure --prefix=/usr \
+		--enable-gold \
+		--enable-ld=default \
+		--enable-plugins \
+		--enable-shared \
+		--disable-werror \
+		--enable-64-bit-bfd \
+		--with-system-zlib
 endef
 
 define BINUTILS_2_30_BUILD_CMDS
 	cd $(BINUTILS_2_30_DIR); \
 	cd build; \
-	make
+	make  tooldir=/usr
 endef
 
 define BINUTILS_2_30_INSTALL_TARGET_CMDS
-	-case $$(uname -m) in \
-		x86_64) mkdir -v /tools/lib && ln -sv lib /tools/lib64 ;; \
-	esac 
-
 	cd $(BINUTILS_2_30_DIR); \
 	cd build; \
-	make install
+	make -k check; \
+	make  tooldir=/usr install
 endef
 
 $(eval $(gen-pkg-name))

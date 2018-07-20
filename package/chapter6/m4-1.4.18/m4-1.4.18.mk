@@ -6,7 +6,7 @@ define M4_1_4_18_SOURCE_CMDS
 endef
 
 define M4_1_4_18_CONFIGURE_CMDS
-	cd $(M4_1_4_18_DIR); ./configure --prefix=/tools
+	cd $(M4_1_4_18_DIR); ./configure --prefix=/usr
 endef
 
 define M4_1_4_18_BUILD_CMDS

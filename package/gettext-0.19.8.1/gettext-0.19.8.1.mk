@@ -8,11 +8,12 @@ endef
 define GETTEXT_0_19_8_1_CONFIGURE_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
 	cd gettext-tools; \
-	EMACS="no" ./configure --prefix=/tools --disable-shared./configure --prefix=/tools
+	EMACS="no" ./configure --prefix=/tools --disable-shared
 endef
 
 define GETTEXT_0_19_8_1_BUILD_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
+	cd gettext-tools; \
 	make -C gnulib-lib; \
 	make -C intl pluralx.c; \
 	make -C src msgfmt; \
@@ -22,6 +23,7 @@ endef
 
 define GETTEXT_0_19_8_1_INSTALL_TARGET_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
+	cd gettext-tools; \
 	cp -v src/{msgfmt,msgmerge,xgettext} /tools/bin
 endef
 
