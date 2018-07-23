@@ -1,7 +1,8 @@
 # declare before package include scripts/generic-package.mk
 
-LFS-SRC=/mnt/lfs/sources
-BUILD_DIR=/mnt/lfs/sources
+LFS=/mnt/lfs
+LFS-SRC=$(LFS)/sources
+BUILD_DIR=$(LFS)/sources
 
 PACKAGES :=
 PACKAGES_ALL :=
@@ -12,6 +13,39 @@ include scripts/utils.mk
 
 include package/pkg-utils.mk
 include package/pkg-generic.mk
+
+chapter1:
+	echo "Just Introduction" | tee -a chapter1.log
+
+# make need build-essential installed
+chapter2:
+	sudo apt-get install -y binutils bison m4 texinfo xz-utils gawk gcc g++ | tee -a .chapter2.log
+	bash version-check.sh | tee -a .chapter2.log
+	sudo ln -fs /bin/bash /bin/sh | tee -a .chapter2.log
+	echo "Please create partitions manually!!!" | tee -a .chapter2.log
+
+	# check partitions
+	[[ -e $(LFS) ]] || exit 1
+
+chapter3:
+	# get sources package
+	sudo mkdir -v $(LFS)/sources | tee -a .chapter3.log
+	sudo chmod -v a+wt $(LFS)/sources | tee -a .chapter3.log
+	sudo tar xf sources.tar -C $(LFS) | tee -a .chapter3.log
+	pushd $(LFS)/sources; \
+	md5sum -c md5sums | tee -a .chapter3.log; \
+	popd; \ 
+
+chapter4:
+	-sudo mkdir -v $(LFS)/tools  | tee -a .chapter4.log
+	-sudo ln -sv $(LFS)/tools /  | tee -a .chapter4.log
+	-sudo groupadd lfs  | tee -a .chapter4.log
+	-sudo useradd -s /bin/bash -g lfs -m -k /dev/null lfs  | tee -a .chapter4.log
+	-sudo passwd lfs  | tee -a .chapter4.log
+	-sudo chown -v lfs $(LFS)/tools  | tee -a .chapter4.log
+	-sudo chown -v lfs $(LFS)/sources | tee -a .chapter4.log
+
+	echo "Please su - lfs, and create bash_profile and bashrc !!!" | tee -a .chapter4.log
 
 ifeq ($(CHARPTER),5)
 include package/binutils-2.30/binutils-2.30.mk
