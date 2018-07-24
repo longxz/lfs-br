@@ -75,10 +75,10 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 
 	# Configuring Glibc
 	cd $(GLIBC_2_27_DIR); \
-	echo -e '# Begin /etc/nsswitch.conf\npasswd: files\n\
-	group: files\nshadow: files\n\nhosts: files dns\n\networks: files\n\n\
-	protocols: files\nservices: files\nethers: files\nrpc: files\n\n\
-	# End /etc/nsswitch.conf\n'	> /etc/nsswitch.conf
+	echo -e '# Begin /etc/nsswitch.conf\npasswd: files\n \
+			group: files\nshadow: files\n\nhosts: files dns\n\networks: files\n\n \
+			protocols: files\nservices: files\nethers: files\nrpc: files\n\n \
+			# End /etc/nsswitch.conf\n'	> /etc/nsswitch.conf
 
 	cd $(GLIBC_2_27_DIR); \
 	tar -xf ../../tzdata2018c.tar.gz; \
@@ -97,8 +97,10 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 	cd $(GLIBC_2_27_DIR); \
 	tzselect; \
 	cp -v /usr/share/zoneinfo/<xxx> /etc/localtime; \
-	echo -e '# Begin /etc/ld.so.conf\n/usr/local/lib\n/opt/lib' > /etc/ld.so.conf; \
-	echo -e '# Add an include directory\ninclude /etc/ld.so.conf.d/*.conf' > /etc/ld.so.conf; \
+	echo -e '# Begin /etc/ld.so.conf\n \
+			/usr/local/lib\n/opt/lib' > /etc/ld.so.conf; \
+	echo -e '# Add an include directory\n \
+			include /etc/ld.so.conf.d/*.conf' > /etc/ld.so.conf; \
 	mkdir -pv /etc/ld.so.conf.d	
 
 	# Adjusting the Toolchain
@@ -108,8 +110,8 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 	mv -v /tools/bin/{ld-new,ld}; \
 	ln -sv /tools/bin/ld /tools/$$(uname -m)-pc-linux-gnu/bin/ld; \
 	gcc -dumpspecs | sed -e 's@/tools@@g' \
-	-e '/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}' \
-	-e '/\*cpp:/{n;s@$$@ -isystem /usr/include@}' > \
+		-e '/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}' \
+		-e '/\*cpp:/{n;s@$$@ -isystem /usr/include@}' > \
 	`dirname $$(gcc --print-libgcc-file-name)`/specs
 
 	cd $(GLIBC_2_27_DIR); \
