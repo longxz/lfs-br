@@ -25,7 +25,7 @@ define KMOD_25_INSTALL_TARGET_CMDS
 	for target in depmod insmod lsmod modinfo modprobe rmmod; do \
 		ln -sfv ../bin/kmod /sbin/$$target \
 	done; \
-	ln -sfv kmod /bin/lsmod \
+	ln -sfv kmod /bin/lsmod;
 endef
 
 $(eval $(gen-pkg-name))

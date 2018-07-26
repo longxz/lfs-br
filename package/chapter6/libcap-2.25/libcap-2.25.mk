@@ -7,7 +7,7 @@ endef
 
 define LIBCAP_2_25_CONFIGURE_CMDS
 	cd $(LIBCAP_2_25_DIR); \
-	sed -i '/install.*STALIBNAME/d' libcap/Makefile; \
+	sed -i '/install.*STALIBNAME/d' libcap/Makefile;
 endef
 
 define LIBCAP_2_25_BUILD_CMDS

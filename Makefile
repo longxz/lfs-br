@@ -1,13 +1,14 @@
 # declare before package include scripts/generic-package.mk
 
-LFS=/mnt/lfs
-LFS-SRC=$(LFS)/sources
-BUILD_DIR=$(LFS)/sources
+empty :=
+#LFS := /mnt/lfs
+#LFS-SRC := $(LFS)/sources
+#BUILD_DIR:=$(LFS)/sources
 
 PACKAGES :=
 PACKAGES_ALL :=
 
-CHARPTER=5
+CHARPTER := 5
 
 include scripts/utils.mk
 
@@ -47,6 +48,19 @@ chapter4:
 
 	echo "Please su - lfs, and create bash_profile and bashrc !!!" | tee -a .chapter4.log
 
+chapter6:
+	-sudo mkdir -pv $$LFS/{dev,proc,sys,run}
+	-sudo mknod -m 600 $$LFS/dev/console c 5 1
+	-sudo mknod -m 666 $$LFS/dev/null c 1 3
+	-sudo mount -v --bind /dev $$LFS/dev
+	-sudo mount -vt devpts devpts $$LFS/dev/pts -o gid=5,mode=620
+	-sudo mount -vt proc proc $$LFS/proc
+	-sudo mount -vt sysfs sysfs $$LFS/sys
+	-sudo mount -vt tmpfs tmpfs $$LFS/run
+	if [ -h $$LFS/dev/shm ]; then \
+ 		mkdir -pv $$LFS/$$(readlink $$LFS/dev/shm); \
+	fi;\
+
 ifeq ($(CHARPTER),5)
 include package/binutils-2.30/binutils-2.30.mk
 include package/gcc-7.3.0/gcc-7.3.0.mk
@@ -82,6 +96,9 @@ include package/xz-5.2.3/xz-5.2.3.mk
 endif
 
 ifeq ($(CHARPTER),6)
+LFS := $(empty)
+LFS-SRC := /sources-ch6
+BUILD_DIR := /sources-ch6
 include package/chapter6/linux-4.15.3/linux-4.15.3.mk
 include package/chapter6/man-pages-4.15/man-pages-4.15.mk
 include package/chapter6/glibc-2.27/glibc-2.27.mk

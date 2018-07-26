@@ -9,7 +9,7 @@ define IPROUTE2_4_15_0_CONFIGURE_CMDS
 	cd $(IPROUTE2_4_15_0_DIR); \
 	sed -i /ARPD/d Makefile; \
 	rm -fv man/man8/arpd.8; \
-	sed -i 's/m_ipt.o//' tc/Makefile; \
+	sed -i 's/m_ipt.o//' tc/Makefile;
 endef
 
 define IPROUTE2_4_15_0_BUILD_CMDS

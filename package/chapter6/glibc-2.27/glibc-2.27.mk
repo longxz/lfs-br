@@ -11,17 +11,17 @@ define GLIBC_2_27_CONFIGURE_CMDS
 	ln -sfv /tools/lib/gcc /usr/lib; \
 	case $$(uname -m) in \
 		i?86)  \
-			GCC_INCDIR=/usr/lib/gcc/$$(uname -m)-pc-linux-gnu/7.3.0/include  \
-			ln -sfv ld-linux.so.2 /lib/ld-lsb.so.3 \
+			GCC_INCDIR=/usr/lib/gcc/$$(uname -m)-pc-linux-gnu/7.3.0/include;  \
+			ln -sfv ld-linux.so.2 /lib/ld-lsb.so.3; \
 			;; \
 		x86_64) \
-			GCC_INCDIR=/usr/lib/gcc/x86_64-pc-linux-gnu/7.3.0/include \
-			ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64 \
-			ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3 \
+			GCC_INCDIR=/usr/lib/gcc/x86_64-pc-linux-gnu/7.3.0/include; \
+			ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64; \
+			ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3; \
 			;; \
 	esac
 
-	cd $(GCC_7_3_0_DIR); \
+	cd $(GLIBC_2_27_DIR); \
 	rm -f /usr/include/limits.h; \
 	mkdir -v build; \
 	cd build; \
@@ -123,7 +123,7 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 	grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g'; \
 	grep "/lib.*/libc.so.6 " dummy.log; \
 	grep found dummy.log; \
-	rm -v dummy.c a.out dummy.log; \
+	rm -v dummy.c a.out dummy.log;
 endef
 
 $(eval $(gen-pkg-name))

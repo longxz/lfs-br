@@ -8,7 +8,7 @@ endef
 define SYSKLOGD_1_5_1_CONFIGURE_CMDS
 	cd $(SYSKLOGD_1_5_1_DIR); \
 	sed -i '/Error loading kernel symbols/{n;n;d}' ksym_mod.c; \
-	sed -i 's/union wait/int/' syslogd.c; \
+	sed -i 's/union wait/int/' syslogd.c;
 endef
 
 define SYSKLOGD_1_5_1_BUILD_CMDS
