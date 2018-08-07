@@ -19,7 +19,7 @@ endef
 
 define KBD_2_0_4_INSTALL_TARGET_CMDS
 	cd $(KBD_2_0_4_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	mkdir -v /usr/share/doc/kbd-2.0.4; \
 	cp -R -v docs/doc/* /usr/share/doc/kbd-2.0.4

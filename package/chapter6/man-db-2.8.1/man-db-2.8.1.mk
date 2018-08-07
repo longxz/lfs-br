@@ -24,7 +24,7 @@ endef
 
 define MAN_DB_2_8_1_INSTALL_TARGET_CMDS
 	cd $(MAN_DB_2_8_1_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

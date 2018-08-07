@@ -15,7 +15,7 @@ endef
 
 define DIFFUTILS_3_6_INSTALL_TARGET_CMDS
 	cd $(DIFFUTILS_3_6_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

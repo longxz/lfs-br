@@ -19,7 +19,7 @@ endef
 
 define PKG_CONFIG_0_29_2_INSTALL_TARGET_CMDS
 	cd $(PKG_CONFIG_0_29_2_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

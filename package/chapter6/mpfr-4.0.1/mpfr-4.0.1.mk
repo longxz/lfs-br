@@ -21,7 +21,7 @@ endef
 
 define MPFR_4_0_1_INSTALL_TARGET_CMDS
 	cd $(MPFR_4_0_1_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	make install-html
 endef

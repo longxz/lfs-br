@@ -15,7 +15,7 @@ endef
 
 define XZ_5_2_3_INSTALL_TARGET_CMDS
 	cd $(XZ_5_2_3_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

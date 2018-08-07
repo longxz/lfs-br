@@ -30,7 +30,7 @@ endef
 define BINUTILS_2_30_INSTALL_TARGET_CMDS
 	cd $(BINUTILS_2_30_DIR); \
 	cd build; \
-	make -k check; \
+	[[ -z "$$LFSCHECK" ]] || make -k check; \
 	make  tooldir=/usr install
 endef
 

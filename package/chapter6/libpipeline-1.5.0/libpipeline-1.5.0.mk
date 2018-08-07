@@ -15,7 +15,7 @@ endef
 
 define LIBPIPELINE_1_5_0_INSTALL_TARGET_CMDS
 	cd $(LIBPIPELINE_1_5_0_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

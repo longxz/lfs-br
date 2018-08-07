@@ -15,7 +15,7 @@ endef
 
 define TAR_1_30_INSTALL_TARGET_CMDS
 	cd $(TAR_1_30_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

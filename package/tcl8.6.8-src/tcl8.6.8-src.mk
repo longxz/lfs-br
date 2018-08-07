@@ -15,7 +15,7 @@ define TCL8_6_8_SRC_BUILD_CMDS
 	cd $(TCL8_6_8_SRC_DIR); \
 	cd unix; \
 	make; \
-	TZ=UTC make test;
+	[[ -z "$$LFSCHECK" ]] || TZ=UTC make test;
 endef
 
 define TCL8_6_8_SRC_INSTALL_TARGET_CMDS

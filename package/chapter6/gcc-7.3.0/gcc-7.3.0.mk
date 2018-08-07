@@ -17,7 +17,7 @@ define GCC_7_3_0_CONFIGURE_CMDS
 	rm -f /usr/lib/gcc; \
 	mkdir -v build; \
 	cd build; \
-	SED=sed; \
+	SED=sed \
 	../configure --prefix=/usr \
 		--enable-languages=c,c++ \
 		--disable-multilib \
@@ -27,14 +27,13 @@ endef
 define GCC_7_3_0_BUILD_CMDS
 	cd $(GCC_7_3_0_DIR); \
 	cd build; \
-	make
+	SED=sed	make
 endef
 
 define GCC_7_3_0_INSTALL_TARGET_CMDS
 	cd $(GCC_7_3_0_DIR); \
 	cd build; \
-	ulimit -s 32768; \
-	make -k check; \
+	[[ -z "LFSCHECK" ]] || ulimit -s 32768; SED=sed make -k check; \
 	../contrib/test_summary; \
 	make install; \
 	ln -sv ../usr/bin/cpp /lib; \

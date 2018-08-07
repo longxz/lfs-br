@@ -17,7 +17,7 @@ endef
 define AUTOMAKE_1_15_1_INSTALL_TARGET_CMDS
 	cd $(AUTOMAKE_1_15_1_DIR); \
 	sed -i "s:./configure:LEXLIB=/usr/lib/libfl.a &:" t/lex-{clean,depend}-cxx.sh; \
-	make -j4 check; \
+	[[ -z "$$LFSCHECK" ]] || make -j4 check; \
 	make install
 endef
 

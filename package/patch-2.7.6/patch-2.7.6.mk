@@ -15,7 +15,7 @@ endef
 
 define PATCH_2_7_6_INSTALL_TARGET_CMDS
 	cd $(PATCH_2_7_6_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

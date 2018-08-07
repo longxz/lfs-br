@@ -15,7 +15,7 @@ endef
 
 define COREUTILS_8_29_INSTALL_TARGET_CMDS
 	cd $(COREUTILS_8_29_DIR); \
-	make RUN_EXPENSIVE_TESTS=yes check; \
+	[[ -z "$$LFSCHECK" ]] || make RUN_EXPENSIVE_TESTS=yes check; \
 	make install
 endef
 

@@ -15,7 +15,7 @@ endef
 
 define FILE_5_32_INSTALL_TARGET_CMDS
 	cd $(FILE_5_32_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

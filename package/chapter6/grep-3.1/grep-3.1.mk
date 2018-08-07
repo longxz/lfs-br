@@ -15,7 +15,7 @@ endef
 
 define GREP_3_1_INSTALL_TARGET_CMDS
 	cd $(GREP_3_1_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

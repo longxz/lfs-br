@@ -18,7 +18,7 @@ endef
 
 define GDBM_1_14_1_INSTALL_TARGET_CMDS
 	cd $(GDBM_1_14_1_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

@@ -15,7 +15,7 @@ endef
 
 define AUTOCONF_2_69_INSTALL_TARGET_CMDS
 	cd $(AUTOCONF_2_69_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

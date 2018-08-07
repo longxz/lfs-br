@@ -25,7 +25,7 @@ endef
 
 define PERL_5_26_1_INSTALL_TARGET_CMDS
 	cd $(PERL_5_26_1_DIR); \
-	make -k test; \
+	[[ -z "$$LFSCHECK" ]] || make -k test; \
 	make install; \
 	unset BUILD_ZLIB BUILD_BZIP2
 endef

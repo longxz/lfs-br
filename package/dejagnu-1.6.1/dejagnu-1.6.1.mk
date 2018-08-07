@@ -16,7 +16,7 @@ endef
 define DEJAGNU_1_6_1_INSTALL_TARGET_CMDS
 	cd $(DEJAGNU_1_6_1_DIR); \
 	make install; \
-	make check;
+	[[ -z "$$LFSCHECK" ]] || make check;
 endef
 
 $(eval $(gen-pkg-name))

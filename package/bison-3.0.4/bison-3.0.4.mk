@@ -15,7 +15,7 @@ endef
 
 define BISON_3_0_4_INSTALL_TARGET_CMDS
 	cd $(BISON_3_0_4_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

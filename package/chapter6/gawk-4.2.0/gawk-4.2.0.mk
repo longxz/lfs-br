@@ -17,7 +17,7 @@ endef
 
 define GAWK_4_2_0_INSTALL_TARGET_CMDS
 	cd $(GAWK_4_2_0_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	mkdir -v /usr/share/doc/gawk-4.2.0; \
 	cp -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-4.2.0

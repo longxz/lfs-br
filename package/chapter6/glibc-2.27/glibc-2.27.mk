@@ -19,9 +19,7 @@ define GLIBC_2_27_CONFIGURE_CMDS
 			ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64; \
 			ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3; \
 			;; \
-	esac
-
-	cd $(GLIBC_2_27_DIR); \
+	esac; \
 	rm -f /usr/include/limits.h; \
 	mkdir -v build; \
 	cd build; \
@@ -43,7 +41,7 @@ endef
 define GLIBC_2_27_INSTALL_TARGET_CMDS
 	cd $(GLIBC_2_27_DIR); \
 	cd build; \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	touch /etc/ld.so.conf; \
 	sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile; \
 	make install; \
@@ -75,10 +73,10 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 
 	# Configuring Glibc
 	cd $(GLIBC_2_27_DIR); \
-	echo -e '# Begin /etc/nsswitch.conf\npasswd: files\n \
-			group: files\nshadow: files\n\nhosts: files dns\n\networks: files\n\n \
-			protocols: files\nservices: files\nethers: files\nrpc: files\n\n \
-			# End /etc/nsswitch.conf\n'	> /etc/nsswitch.conf
+	echo "# Begin /etc/nsswitch.conf\npasswd: files" >> /etc/nsswitch.conf; \
+	echo -e "group: files\nshadow: files\n\nhosts: files dns\n\networks: files\n\n" >> /etc/nsswitch.conf \
+	echo -e "protocols: files\nservices: files\nethers: files\nrpc: files\n\n" >> /etc/nsswitch.conf \
+	echo "# End /etc/nsswitch.conf'	>> /etc/nsswitch.conf
 
 	cd $(GLIBC_2_27_DIR); \
 	tar -xf ../../tzdata2018c.tar.gz; \
@@ -97,10 +95,10 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 	cd $(GLIBC_2_27_DIR); \
 	tzselect; \
 	cp -v /usr/share/zoneinfo/<xxx> /etc/localtime; \
-	echo -e '# Begin /etc/ld.so.conf\n \
-			/usr/local/lib\n/opt/lib' > /etc/ld.so.conf; \
-	echo -e '# Add an include directory\n \
-			include /etc/ld.so.conf.d/*.conf' > /etc/ld.so.conf; \
+	echo "# Begin /etc/ld.so.conf" >> /etc/ld.so.conf; \
+	echo "/usr/local/lib\n/opt/lib" >> /etc/ld.so.conf; \
+	echo "# Add an include directory" >> /etc/ld.so.conf; \
+	echo "include /etc/ld.so.conf.d/*.conf" >> /etc/ld.so.conf; \
 	mkdir -pv /etc/ld.so.conf.d	
 
 	# Adjusting the Toolchain

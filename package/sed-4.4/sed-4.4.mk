@@ -15,7 +15,7 @@ endef
 
 define SED_4_4_INSTALL_TARGET_CMDS
 	cd $(SED_4_4_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

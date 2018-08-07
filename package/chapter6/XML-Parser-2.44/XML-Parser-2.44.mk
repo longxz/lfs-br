@@ -16,7 +16,7 @@ endef
 
 define XML_PARSER_2_44_INSTALL_TARGET_CMDS
 	cd $(XML_PARSER_2_44_DIR); \
-	make test; \
+	[[ -z "$$LFSCHECK" ]] || make test; \
 	make install
 endef
 

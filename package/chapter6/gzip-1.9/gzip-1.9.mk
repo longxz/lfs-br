@@ -15,7 +15,7 @@ endef
 
 define GZIP_1_9_INSTALL_TARGET_CMDS
 	cd $(GZIP_1_9_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	mv -v /usr/bin/gzip /bin
 endef

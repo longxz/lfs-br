@@ -16,10 +16,10 @@ define GCC_7_3_0_PASS2_CONFIGURE_CMDS
 		cp -uv $$file{,.orig}; \
 		sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
 			-e 's@/usr@/tools@g' $$file.orig > $$file; \
-		echo -e '#undef STANDARD_STARTFILE_PREFIX_1\n \
-				#undef STANDARD_STARTFILE_PREFIX_2\n \
-				#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"\n \
-				#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
+		echo '#undef STANDARD_STARTFILE_PREFIX_1' >> $$file; \
+		echo '#undef STANDARD_STARTFILE_PREFIX_2' >> $$file; \
+		echo '#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"' >> $$file; \
+		echo '#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
 		touch $$file.orig; \
 	done
 
@@ -42,10 +42,10 @@ define GCC_7_3_0_PASS2_CONFIGURE_CMDS
 	cd $(GCC_7_3_0_PASS2_DIR); \
 	mkdir -v build; \
 	cd build; \
-	CC=$$LFS_TGT-gcc; \
-	CXX=$$LFS_TGT-g++; \
-	AR=$$LFS_TGT-ar; \
-	RANLIB=$$LFS_TGT-ranlib; \
+	CC=$$LFS_TGT-gcc \
+	CXX=$$LFS_TGT-g++ \
+	AR=$$LFS_TGT-ar \
+	RANLIB=$$LFS_TGT-ranlib \
 	../configure \
 		--prefix=/tools \
 		--with-local-prefix=/tools \
@@ -61,12 +61,20 @@ endef
 define GCC_7_3_0_PASS2_BUILD_CMDS
 	cd $(GCC_7_3_0_PASS2_DIR); \
 	cd build; \
+	CC=$$LFS_TGT-gcc \
+	CXX=$$LFS_TGT-g++ \
+	AR=$$LFS_TGT-ar \
+	RANLIB=$$LFS_TGT-ranlib \
 	make
 endef
 
 define GCC_7_3_0_PASS2_INSTALL_TARGET_CMDS
 	cd $(GCC_7_3_0_PASS2_DIR); \
 	cd build; \
+	CC=$$LFS_TGT-gcc \
+	CXX=$$LFS_TGT-g++ \
+	AR=$$LFS_TGT-ar \
+	RANLIB=$$LFS_TGT-ranlib \
 	make install; \
 	ln -sv gcc /tools/bin/cc; \
 	echo 'int main(){}' > dummy.c; \

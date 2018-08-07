@@ -15,7 +15,7 @@ endef
 
 define ZLIB_1_2_11_INSTALL_TARGET_CMDS
 	cd $(ZLIB_1_2_11_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	mv -v /usr/lib/libz.so.* /lib; \
 	ln -sfv ../../lib/$$(readlink /usr/lib/libz.so) /usr/lib/libz.so

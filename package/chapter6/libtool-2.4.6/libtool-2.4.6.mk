@@ -15,7 +15,7 @@ endef
 
 define LIBTOOL_2_4_6_INSTALL_TARGET_CMDS
 	cd $(LIBTOOL_2_4_6_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

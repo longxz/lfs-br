@@ -21,7 +21,7 @@ endef
 
 define LIBFFI_3_2_1_INSTALL_TARGET_CMDS
 	cd $(LIBFFI_3_2_1_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

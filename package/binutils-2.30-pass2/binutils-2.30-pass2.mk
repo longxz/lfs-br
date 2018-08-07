@@ -10,9 +10,9 @@ define BINUTILS_2_30_PASS2_CONFIGURE_CMDS
 	cd $(BINUTILS_2_30_PASS2_DIR); \
 	mkdir -v build; \
 	cd build; \
-	CC=$$LFS_TGT-gcc; \
-	AR=$$LFS_TGT-ar; \
-	RANLIB=$$LFS_TGT-ranlib; \
+	CC=$$LFS_TGT-gcc \
+	AR=$$LFS_TGT-ar \
+	RANLIB=$$LFS_TGT-ranlib \
 	../configure \
 		--prefix=/tools \
 		--disable-nls \
@@ -24,12 +24,18 @@ endef
 define BINUTILS_2_30_PASS2_BUILD_CMDS
 	cd $(BINUTILS_2_30_PASS2_DIR); \
 	cd build; \
+	CC=$$LFS_TGT-gcc \
+	AR=$$LFS_TGT-ar \
+	RANLIB=$$LFS_TGT-ranlib \
 	make
 endef
 
 define BINUTILS_2_30_PASS2_INSTALL_TARGET_CMDS
 	cd $(BINUTILS_2_30_PASS2_DIR); \
 	cd build; \
+	CC=$$LFS_TGT-gcc \
+	AR=$$LFS_TGT-ar \
+	RANLIB=$$LFS_TGT-ranlib \
 	make install; \
 	make -C ld clean; \
 	make -C ld LIB_PATH=/usr/lib:/lib; \

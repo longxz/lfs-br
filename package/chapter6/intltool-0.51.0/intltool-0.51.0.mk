@@ -17,7 +17,7 @@ endef
 
 define INTLTOOL_0_51_0_INSTALL_TARGET_CMDS
 	cd $(INTLTOOL_0_51_0_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	install -v -Dm644 doc/I18N-HOWTO /usr/share/doc/intltool-0.51.0/I18N-HOWTO
 endef

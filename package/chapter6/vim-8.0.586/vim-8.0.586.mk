@@ -18,7 +18,7 @@ endef
 
 define VIM_8_0_586_INSTALL_TARGET_CMDS
 	cd $(VIM_8_0_586_DIR); \
-	make -j1 test &> vim-test.log; \
+	[[ -z "$$LFSCHECK" ]] || make -j1 test &> vim-test.log; \
 	make install; \
 	ln -sv vim /usr/bin/vi; \
 	for L in /usr/share/man/{,*/}man1/vim.1; do \

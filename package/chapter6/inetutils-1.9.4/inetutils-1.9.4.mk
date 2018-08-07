@@ -24,7 +24,7 @@ endef
 
 define INETUTILS_1_9_4_INSTALL_TARGET_CMDS
 	cd $(INETUTILS_1_9_4_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin; \
 	mv -v /usr/bin/ifconfig /sbin

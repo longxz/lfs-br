@@ -23,7 +23,7 @@ endef
 
 define GMP_6_1_2_INSTALL_TARGET_CMDS
 	cd $(GMP_6_1_2_DIR); \
-	make check 2>&1 | tee gmp-check-log; \
+	[[ -z "$$LFSCHECK" ]] || make check 2>&1 | tee gmp-check-log; \
 	awk '/# PASS:/{total+=$3} ; END{print total}' gmp-check-log ;\
 	make install; \
 	make install-html

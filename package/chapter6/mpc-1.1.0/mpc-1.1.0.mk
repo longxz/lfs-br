@@ -20,7 +20,7 @@ endef
 
 define MPC_1_1_0_INSTALL_TARGET_CMDS
 	cd $(MPC_1_1_0_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	make install-html
 endef

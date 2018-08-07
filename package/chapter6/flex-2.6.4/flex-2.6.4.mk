@@ -18,7 +18,7 @@ endef
 
 define FLEX_2_6_4_INSTALL_TARGET_CMDS
 	cd $(FLEX_2_6_4_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	ln -sv flex /usr/bin/lex
 endef

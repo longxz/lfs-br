@@ -20,10 +20,10 @@ define GCC_7_3_0_CONFIGURE_CMDS
 		cp -uv $$file{,.orig}; \
 		sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
 			-e 's@/usr@/tools@g' $$file.orig > $$file; \
-		echo -e '#undef STANDARD_STARTFILE_PREFIX_1\n\
-				#undef STANDARD_STARTFILE_PREFIX_2\n\
-				#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"\n\
-				#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file;\
+		echo '#undef STANDARD_STARTFILE_PREFIX_1' >> $$file; \
+		echo '#undef STANDARD_STARTFILE_PREFIX_2' >> $$file; \
+		echo '#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"' >> $$file; \
+		echo '#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
 		touch $$file.orig; \
 	done
 

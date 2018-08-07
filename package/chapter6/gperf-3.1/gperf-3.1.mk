@@ -15,7 +15,7 @@ endef
 
 define GPERF_3_1_INSTALL_TARGET_CMDS
 	cd $(GPERF_3_1_DIR); \
-	make -j1 check; \
+	[[ -z "$$LFSCHECK" ]] || make -j1 check; \
 	make install
 endef
 

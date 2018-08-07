@@ -17,7 +17,7 @@ endef
 
 define MAKE_4_2_1_INSTALL_TARGET_CMDS
 	cd $(MAKE_4_2_1_DIR); \
-	make PERL5LIB=$$PWD/tests/ check; \
+	[[ -z "$$LFSCHECK" ]] || make PERL5LIB=$$PWD/tests/ check; \
 	make install
 endef
 

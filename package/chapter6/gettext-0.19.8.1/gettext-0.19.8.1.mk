@@ -20,7 +20,7 @@ endef
 
 define GETTEXT_0_19_8_1_INSTALL_TARGET_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	chmod -v 0755 /usr/lib/preloadable_libintl.so
 endef

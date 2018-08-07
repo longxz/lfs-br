@@ -15,7 +15,7 @@ endef
 
 define GAWK_4_2_0_INSTALL_TARGET_CMDS
 	cd $(GAWK_4_2_0_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

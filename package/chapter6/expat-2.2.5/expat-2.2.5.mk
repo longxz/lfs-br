@@ -17,7 +17,7 @@ endef
 
 define EXPAT_2_2_5_INSTALL_TARGET_CMDS
 	cd $(EXPAT_2_2_5_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	install -v -dm755 /usr/share/doc/expat-2.2.5; \
 	install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.2.5

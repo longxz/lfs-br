@@ -15,7 +15,7 @@ endef
 
 define FINDUTILS_4_6_0_INSTALL_TARGET_CMDS
 	cd $(FINDUTILS_4_6_0_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

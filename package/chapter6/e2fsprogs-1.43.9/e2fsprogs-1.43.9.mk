@@ -29,7 +29,7 @@ endef
 define E2FSPROGS_1_43_9_INSTALL_TARGET_CMDS
 	cd $(E2FSPROGS_1_43_9_DIR); \
 	ln -sfv /tools/lib/lib{blk,uu}id.so.1 lib; \
-	make LD_LIBRARY_PATH=/tools/lib check; \
+	[[ -z "$$LFSCHECK" ]] || make LD_LIBRARY_PATH=/tools/lib check; \
 	make install; \
 	make install-libs; \
 	chmod -v u+w /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a; \

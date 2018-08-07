@@ -1,43 +1,89 @@
 # declare before package include scripts/generic-package.mk
 
-empty :=
-#LFS := /mnt/lfs
-#LFS-SRC := $(LFS)/sources
-#BUILD_DIR:=$(LFS)/sources
+ROOT_PART=/dev/sdc1
+SWAP_PART=/dev/sdc2
 
+empty :=
+LFS := /mnt/lfs
+LFS-SRC := $(LFS)/sources
+BUILD_DIR:=$(LFS)/sources
+LFSCHECK := 
 PACKAGES :=
 PACKAGES_ALL :=
 
-CHARPTER := 5
+CHAPTER := 5
+
+ifeq ($(CHAPTER),D5)
+$(info $(LFS))
+$(info $(LFS-SRC))
+$(info $(BUILD_DIR))
+endif
+
+ifeq ($(CHAPTER),D6)
+LFS := $(empty)
+LFS-SRC := /sources-ch6
+BUILD_DIR := /sources-ch6
+$(info $(LFS))
+$(info $(LFS-SRC))
+$(info $(BUILD_DIR))
+endif
+
+ifeq ($(CHAPTER),6)
+LFS := $(empty)
+LFS-SRC := /sources-ch6
+BUILD_DIR := /sources-ch6
+endif
 
 include scripts/utils.mk
 
 include package/pkg-utils.mk
 include package/pkg-generic.mk
 
-chapter1:
-	echo "Just Introduction" | tee -a chapter1.log
+test:
+	echo "target: test..."
+	echo "LFS_TGT: $$LFS_TGT"
 
-# make need build-essential installed
-chapter2:
+chapter1:
+	echo "target: chapter1..."
+	echo "Just Introduction" | tee -a .chapter1.log
+
+# sudo apt install -y build-essential
+chapter2.2:
+	echo "target: chapter2.2..."
 	sudo apt-get install -y binutils bison m4 texinfo xz-utils gawk gcc g++ | tee -a .chapter2.log
-	bash version-check.sh | tee -a .chapter2.log
 	sudo ln -fs /bin/bash /bin/sh | tee -a .chapter2.log
+	bash version-check.sh | tee -a .chapter2.log
+	
+chapter2.4:
+	echo "target: chapter2.4..."
 	echo "Please create partitions manually!!!" | tee -a .chapter2.log
 
-	# check partitions
-	[[ -e $(LFS) ]] || exit 1
+chapter2.5:
+	echo "target: chapter2.5..."
+	sudo mkfs -v -t ext4 $(ROOT_PART)
+	sudo mkswap $(SWAP_PART)
 
+#source ~/.bashrc
+chapter2.6:
+	echo "target: chapter2.6..."
+	echo "export LFS=/mnt/lfs" >> ~/.bashrc
+	LFS=/mnt/lfs
+	sudo mkdir -pv $$LFS
+	echo "$(ROOT_PART) /mnt/lfs ext4 defaults 1 1" >> /etc/fstab
+	sudo /sbin/swapon -v $(SWAP_PART)
+
+# cp source.tar
 chapter3:
-	# get sources package
+	echo "target: chapter3..."
 	sudo mkdir -v $(LFS)/sources | tee -a .chapter3.log
 	sudo chmod -v a+wt $(LFS)/sources | tee -a .chapter3.log
 	sudo tar xf sources.tar -C $(LFS) | tee -a .chapter3.log
 	pushd $(LFS)/sources; \
 	md5sum -c md5sums | tee -a .chapter3.log; \
-	popd; \ 
+	popd;
 
 chapter4:
+	echo "target: chapter4..."
 	-sudo mkdir -v $(LFS)/tools  | tee -a .chapter4.log
 	-sudo ln -sv $(LFS)/tools /  | tee -a .chapter4.log
 	-sudo groupadd lfs  | tee -a .chapter4.log
@@ -49,6 +95,7 @@ chapter4:
 	echo "Please su - lfs, and create bash_profile and bashrc !!!" | tee -a .chapter4.log
 
 chapter6:
+	echo "target: chapter6..."
 	-sudo mkdir -pv $$LFS/{dev,proc,sys,run}
 	-sudo mknod -m 600 $$LFS/dev/console c 5 1
 	-sudo mknod -m 666 $$LFS/dev/null c 1 3
@@ -61,7 +108,9 @@ chapter6:
  		mkdir -pv $$LFS/$$(readlink $$LFS/dev/shm); \
 	fi;\
 
-ifeq ($(CHARPTER),5)
+
+# su - lfs
+ifeq ($(CHAPTER),5)
 include package/binutils-2.30/binutils-2.30.mk
 include package/gcc-7.3.0/gcc-7.3.0.mk
 include package/linux-4.15.3/linux-4.15.3.mk
@@ -95,10 +144,11 @@ include package/util-linux-2.31.1/util-linux-2.31.1.mk
 include package/xz-5.2.3/xz-5.2.3.mk
 endif
 
-ifeq ($(CHARPTER),6)
-LFS := $(empty)
-LFS-SRC := /sources-ch6
-BUILD_DIR := /sources-ch6
+
+# entering chroot
+# Mounting and Populating /dev
+# Mounting Virtual Kernel File Systems
+ifeq ($(CHAPTER),6)
 include package/chapter6/linux-4.15.3/linux-4.15.3.mk
 include package/chapter6/man-pages-4.15/man-pages-4.15.mk
 include package/chapter6/glibc-2.27/glibc-2.27.mk

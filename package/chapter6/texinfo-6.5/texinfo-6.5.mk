@@ -15,7 +15,7 @@ endef
 
 define TEXINFO_6_5_INSTALL_TARGET_CMDS
 	cd $(TEXINFO_6_5_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	make TEXMF=/usr/share/texmf install-tex; \
 	pushd /usr/share/info \

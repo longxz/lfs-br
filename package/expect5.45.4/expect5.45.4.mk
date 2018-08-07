@@ -21,7 +21,7 @@ endef
 
 define EXPECT5_45_4_INSTALL_TARGET_CMDS
 	cd $(EXPECT5_45_4_DIR); \
-	make test; \
+	[[ -z "$$LFSCHECK" ]] || make test; \
 	make SCRIPTS="" install
 endef
 

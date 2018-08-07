@@ -15,7 +15,7 @@ endef
 
 define CHECK_0_12_0_INSTALL_TARGET_CMDS
 	cd $(CHECK_0_12_0_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install
 endef
 

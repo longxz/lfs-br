@@ -20,7 +20,7 @@ endef
 
 define OPENSSL_1_1_0G_INSTALL_TARGET_CMDS
 	cd $(OPENSSL_1_1_0G_DIR); \
-	make test; \
+	[[ -z "$$LFSCHECK" ]] || make test; \
 	sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile; \
 	make MANSUFFIX=ssl install; \
 	mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.0g; \

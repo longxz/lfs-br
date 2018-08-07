@@ -20,7 +20,7 @@ endef
 
 define SED_4_4_INSTALL_TARGET_CMDS
 	cd $(SED_4_4_DIR); \
-	make check; \
+	[[ -z "$$LFSCHECK" ]] || make check; \
 	make install; \
 	install -d -m755 /usr/share/doc/sed-4.4; \
 	install -m644 doc/sed.html /usr/share/doc/sed-4.4

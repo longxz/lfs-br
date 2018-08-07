@@ -15,7 +15,7 @@ endef
 
 define BASH_4_4_18_INSTALL_TARGET_CMDS
 	cd $(BASH_4_4_18_DIR); \
-	make tests; \
+	[[ -z "$$LFSCHECK" ]] || make tests; \
 	make install; \
 	ln -sv bash /tools/bin/sh
 endef
