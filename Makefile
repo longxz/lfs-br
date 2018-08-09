@@ -1,7 +1,7 @@
 # declare before package include scripts/generic-package.mk
 
-ROOT_PART=/dev/sdc1
-SWAP_PART=/dev/sdc2
+ROOT_PART=/dev/sdb1
+SWAP_PART=/dev/sdb2
 
 empty :=
 LFS := /mnt/lfs
@@ -21,8 +21,8 @@ endif
 
 ifeq ($(CHAPTER),D6)
 LFS := $(empty)
-LFS-SRC := /sources-ch6
-BUILD_DIR := /sources-ch6
+LFS-SRC := /sources.ch6
+BUILD_DIR := /sources.ch6
 $(info $(LFS))
 $(info $(LFS-SRC))
 $(info $(BUILD_DIR))
@@ -30,61 +30,67 @@ endif
 
 ifeq ($(CHAPTER),6)
 LFS := $(empty)
-LFS-SRC := /sources-ch6
-BUILD_DIR := /sources-ch6
+LFS-SRC := /sources.ch6
+BUILD_DIR := /sources.ch6
 endif
 
 include scripts/utils.mk
-
-include package/pkg-utils.mk
-include package/pkg-generic.mk
+include scripts/pkg-utils.mk
+include scripts/pkg-generic.mk
 
 test:
-	echo "target: test..."
-	echo "LFS_TGT: $$LFS_TGT"
+	@echo "target: test..."
+	@echo "LFS_TGT: $$LFS_TGT"
 
 chapter1:
-	echo "target: chapter1..."
-	echo "Just Introduction" | tee -a .chapter1.log
+	@echo "target: chapter1..."
+	@echo "Just Introduction" | tee -a .chapter1.log
 
 # sudo apt install -y build-essential
 chapter2.2:
-	echo "target: chapter2.2..."
+	@echo "target: chapter2.2..."
 	sudo apt-get install -y binutils bison m4 texinfo xz-utils gawk gcc g++ | tee -a .chapter2.log
 	sudo ln -fs /bin/bash /bin/sh | tee -a .chapter2.log
 	bash version-check.sh | tee -a .chapter2.log
 	
 chapter2.4:
-	echo "target: chapter2.4..."
-	echo "Please create partitions manually!!!" | tee -a .chapter2.log
+	@echo "target: chapter2.4..."
+	@echo "Please create partitions manually!!!" | tee -a .chapter2.log
 
 chapter2.5:
-	echo "target: chapter2.5..."
+	@echo "target: chapter2.5..."
 	sudo mkfs -v -t ext4 $(ROOT_PART)
 	sudo mkswap $(SWAP_PART)
 
 #source ~/.bashrc
 chapter2.6:
-	echo "target: chapter2.6..."
-	echo "export LFS=/mnt/lfs" >> ~/.bashrc
-	LFS=/mnt/lfs
-	sudo mkdir -pv $$LFS
+	@echo "target: chapter2.6..."
+	@echo "export LFS=/mnt/lfs" >> ~/.bashrc
+	LFS=/mnt/lfs; sudo mkdir -pv $$LFS
 	echo "$(ROOT_PART) /mnt/lfs ext4 defaults 1 1" >> /etc/fstab
 	sudo /sbin/swapon -v $(SWAP_PART)
 
 # cp source.tar
 chapter3:
-	echo "target: chapter3..."
-	sudo mkdir -v $(LFS)/sources | tee -a .chapter3.log
+	@echo "target: chapter3..."
+	@if [ ! -f ../sources.tar.gz ]; then echo "Please prepare sources package!!!"; exit 1; fi 
+	sudo mkdir -pv $(LFS)/sources | tee -a .chapter3.log
 	sudo chmod -v a+wt $(LFS)/sources | tee -a .chapter3.log
-	sudo tar xf sources.tar -C $(LFS) | tee -a .chapter3.log
+	sudo tar xf ../sources.tar.gz -C $(LFS) | tee -a .chapter3.log
 	pushd $(LFS)/sources; \
 	md5sum -c md5sums | tee -a .chapter3.log; \
 	popd;
 
+	sudo mkdir -pv $(LFS)/sources.ch6 | tee -a .chapter3.log
+	sudo chmod -v a+wt $(LFS)/sources.ch6 | tee -a .chapter3.log
+	sudo tar xf ../sources.tar.gz --strip-components=1 -C $(LFS)/sources.ch6 | tee -a .chapter3.log
+	pushd $(LFS)/sources.ch6; \
+	md5sum -c md5sums | tee -a .chapter3.log; \
+	popd;
+
 chapter4:
-	echo "target: chapter4..."
-	-sudo mkdir -v $(LFS)/tools  | tee -a .chapter4.log
+	@echo "target: chapter4..."
+	@sudo mkdir -pv $(LFS)/tools  | tee -a .chapter4.log
 	-sudo ln -sv $(LFS)/tools /  | tee -a .chapter4.log
 	-sudo groupadd lfs  | tee -a .chapter4.log
 	-sudo useradd -s /bin/bash -g lfs -m -k /dev/null lfs  | tee -a .chapter4.log
@@ -95,7 +101,7 @@ chapter4:
 	echo "Please su - lfs, and create bash_profile and bashrc !!!" | tee -a .chapter4.log
 
 chapter6:
-	echo "target: chapter6..."
+	@echo "target: chapter6..."
 	-sudo mkdir -pv $$LFS/{dev,proc,sys,run}
 	-sudo mknod -m 600 $$LFS/dev/console c 5 1
 	-sudo mknod -m 666 $$LFS/dev/null c 1 3
@@ -108,42 +114,50 @@ chapter6:
  		mkdir -pv $$LFS/$$(readlink $$LFS/dev/shm); \
 	fi;\
 
+	echo "Please chroot and config !!!" | tee -a .chapter6.log
+
+ifeq ($(CHAPTER),D5)
+include package/chapter5/binutils-2.30/binutils-2.30.mk
+endif
 
 # su - lfs
 ifeq ($(CHAPTER),5)
-include package/binutils-2.30/binutils-2.30.mk
-include package/gcc-7.3.0/gcc-7.3.0.mk
-include package/linux-4.15.3/linux-4.15.3.mk
-include package/glibc-2.27/glibc-2.27.mk
-include package/libstdc++-7.3.0/libstdc++-7.3.0.mk
-include package/binutils-2.30-pass2/binutils-2.30-pass2.mk
-include package/gcc-7.3.0-pass2/gcc-7.3.0-pass2.mk
-include package/tcl8.6.8-src/tcl8.6.8-src.mk
-include package/expect5.45.4/expect5.45.4.mk
-include package/dejagnu-1.6.1/dejagnu-1.6.1.mk
-include package/m4-1.4.18/m4-1.4.18.mk
-include package/ncurses-6.1/ncurses-6.1.mk
-include package/bash-4.4.18/bash-4.4.18.mk
-include package/bison-3.0.4/bison-3.0.4.mk
-include package/bzip2-1.0.6/bzip2-1.0.6.mk
-include package/coreutils-8.29/coreutils-8.29.mk
-include package/diffutils-3.6/diffutils-3.6.mk
-include package/file-5.32/file-5.32.mk
-include package/findutils-4.6.0/findutils-4.6.0.mk
-include package/gawk-4.2.0/gawk-4.2.0.mk
-include package/gettext-0.19.8.1/gettext-0.19.8.1.mk
-include package/grep-3.1/grep-3.1.mk
-include package/gzip-1.9/gzip-1.9.mk
-include package/make-4.2.1/make-4.2.1.mk
-include package/patch-2.7.6/patch-2.7.6.mk
-include package/perl-5.26.1/perl-5.26.1.mk
-include package/sed-4.4/sed-4.4.mk
-include package/tar-1.30/tar-1.30.mk
-include package/texinfo-6.5/texinfo-6.5.mk
-include package/util-linux-2.31.1/util-linux-2.31.1.mk
-include package/xz-5.2.3/xz-5.2.3.mk
+include package/chapter5/binutils-2.30/binutils-2.30.mk
+include package/chapter5/gcc-7.3.0/gcc-7.3.0.mk
+include package/chapter5/linux-4.15.3/linux-4.15.3.mk
+include package/chapter5/glibc-2.27/glibc-2.27.mk
+include package/chapter5/libstdc++-7.3.0/libstdc++-7.3.0.mk
+include package/chapter5/binutils-2.30-pass2/binutils-2.30-pass2.mk
+include package/chapter5/gcc-7.3.0-pass2/gcc-7.3.0-pass2.mk
+include package/chapter5/tcl8.6.8-src/tcl8.6.8-src.mk
+include package/chapter5/expect5.45.4/expect5.45.4.mk
+include package/chapter5/dejagnu-1.6.1/dejagnu-1.6.1.mk
+include package/chapter5/m4-1.4.18/m4-1.4.18.mk
+include package/chapter5/ncurses-6.1/ncurses-6.1.mk
+include package/chapter5/bash-4.4.18/bash-4.4.18.mk
+include package/chapter5/bison-3.0.4/bison-3.0.4.mk
+include package/chapter5/bzip2-1.0.6/bzip2-1.0.6.mk
+include package/chapter5/coreutils-8.29/coreutils-8.29.mk
+include package/chapter5/diffutils-3.6/diffutils-3.6.mk
+include package/chapter5/file-5.32/file-5.32.mk
+include package/chapter5/findutils-4.6.0/findutils-4.6.0.mk
+include package/chapter5/gawk-4.2.0/gawk-4.2.0.mk
+include package/chapter5/gettext-0.19.8.1/gettext-0.19.8.1.mk
+include package/chapter5/grep-3.1/grep-3.1.mk
+include package/chapter5/gzip-1.9/gzip-1.9.mk
+include package/chapter5/make-4.2.1/make-4.2.1.mk
+include package/chapter5/patch-2.7.6/patch-2.7.6.mk
+include package/chapter5/perl-5.26.1/perl-5.26.1.mk
+include package/chapter5/sed-4.4/sed-4.4.mk
+include package/chapter5/tar-1.30/tar-1.30.mk
+include package/chapter5/texinfo-6.5/texinfo-6.5.mk
+include package/chapter5/util-linux-2.31.1/util-linux-2.31.1.mk
+include package/chapter5/xz-5.2.3/xz-5.2.3.mk
 endif
 
+ifeq ($(CHAPTER),D6)
+include package/chapter6/linux-4.15.3/linux-4.15.3.mk
+endif
 
 # entering chroot
 # Mounting and Populating /dev
