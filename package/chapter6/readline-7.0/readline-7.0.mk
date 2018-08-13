@@ -25,7 +25,7 @@ define READLINE_7_0_INSTALL_TARGET_CMDS
 	mv -v /usr/lib/lib{readline,history}.so.* /lib; \
 	ln -sfv ../../lib/$$(readlink /usr/lib/libreadline.so) /usr/lib/libreadline.so; \
 	ln -sfv ../../lib/$$(readlink /usr/lib/libhistory.so ) /usr/lib/libhistory.so; \
-	install -v -m644 doc/*.{ps,pdf,html,dvi}; \ /usr/share/doc/readline-7.0
+	install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-7.0
 endef
 
 $(eval $(gen-pkg-name))

@@ -7,7 +7,7 @@ endef
 
 define GETTEXT_0_19_8_1_CONFIGURE_CMDS
 	cd $(GETTEXT_0_19_8_1_DIR); \
-	sed -i '/^TESTS =/d' gettext-runtime/tests/Makefile.in && sed -i 's/test-lock..EXEEXT.//' \
+	sed -i '/^TESTS =/d' gettext-runtime/tests/Makefile.in && sed -i 's/test-lock..EXEEXT.//'; \
 	./configure --prefix=/usr \
 	--disable-static \
 	--docdir=/usr/share/doc/gettext-0.19.8.1

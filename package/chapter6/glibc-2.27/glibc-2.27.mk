@@ -72,18 +72,14 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 	make localedata/install-locales
 
 	# Configuring Glibc
-	cd $(GLIBC_2_27_DIR); \
-	echo "# Begin /etc/nsswitch.conf\npasswd: files" > /etc/nsswitch.conf; \
-	echo -e "group: files\nshadow: files\n\nhosts: files dns\n\networks: files\n\n" >> /etc/nsswitch.conf \
-	echo -e "protocols: files\nservices: files\nethers: files\nrpc: files\n\n" >> /etc/nsswitch.conf \
-	echo "# End /etc/nsswitch.conf"	>> /etc/nsswitch.conf
+	cp $(CATFILES)/chapter6/etc-nsswitch.conf /etc/nsswitch.conf; \
 
 	cd $(GLIBC_2_27_DIR); \
 	tar -xf ../../tzdata2018c.tar.gz; \
 	ZONEINFO=/usr/share/zoneinfo; \
-	mkdir -pv $ZONEINFO/{posix,right}; \
+	mkdir -pv $$ZONEINFO/{posix,right}; \
 	for tz in etcetera southamerica northamerica europe africa antarctica \
-		asia australasia backward pacificnew systemv; do; \
+		asia australasia backward pacificnew systemv; do \
 		zic -L /dev/null -d $$ZONEINFO -y "sh yearistype.sh" $${tz}; \
 		zic -L /dev/null -d $$ZONEINFO/posix -y "sh yearistype.sh" $${tz}; \
 		zic -L leapseconds -d $$ZONEINFO/right -y "sh yearistype.sh" $${tz}; \
@@ -95,10 +91,7 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 	cd $(GLIBC_2_27_DIR); \
 	tzselect; \
 	cp -v /usr/share/zoneinfo/<xxx> /etc/localtime; \
-	echo "# Begin /etc/ld.so.conf" > /etc/ld.so.conf; \
-	echo "/usr/local/lib\n/opt/lib" >> /etc/ld.so.conf; \
-	echo "# Add an include directory" >> /etc/ld.so.conf; \
-	echo "include /etc/ld.so.conf.d/*.conf" >> /etc/ld.so.conf; \
+	cp $(CATFILES)/chapter6/etc-ld.so.conf /etc/ld.so.conf; \
 	mkdir -pv /etc/ld.so.conf.d	
 
 	# Adjusting the Toolchain

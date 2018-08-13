@@ -7,10 +7,11 @@ endef
 
 define NINJA_1_8_2_CONFIGURE_CMDS
 	cd $(NINJA_1_8_2_DIR); \
-	patch -Np1 -i ../ninja-1.8.2-add_NINJAJOBS_var-1.patch; \ python3 configure.py --bootstrap; \
-	python3 configure.py \
-		./ninja ninja_test \
-		./ninja_test --gtest_filter=-SubprocessTest.SetWithLots
+	patch -Np1 -i ../ninja-1.8.2-add_NINJAJOBS_var-1.patch; \
+	python3 configure.py --bootstrap; \
+	python3 configure.py; \
+	./ninja ninja_test; \
+	./ninja_test --gtest_filter=-SubprocessTest.SetWithLots
 endef
 
 define NINJA_1_8_2_BUILD_CMDS

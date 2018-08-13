@@ -7,7 +7,7 @@ endef
 
 define INTLTOOL_0_51_0_CONFIGURE_CMDS
 	cd $(INTLTOOL_0_51_0_DIR); \
-	sed -i 's:\\\${:\\\$\\{:' intltool-update.in; \
+	sed -i 's:\\\$${:\\\$$\\{:' intltool-update.in; \
 	./configure --prefix=/usr
 endef
 

@@ -6,7 +6,7 @@ define GCC_7_3_0_SOURCE_CMDS
 endef
 
 define GCC_7_3_0_CONFIGURE_CMDS
-	-cd $(GCC_7_3_0_DIR); \
+	cd $(GCC_7_3_0_DIR); \
 	case $$(uname -m) in \
 		x86_64) \
 			sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64  \
@@ -21,7 +21,8 @@ define GCC_7_3_0_CONFIGURE_CMDS
 	../configure --prefix=/usr \
 		--enable-languages=c,c++ \
 		--disable-multilib \
-		--disable-bootstrap
+		--disable-bootstrap \
+		--with-system-zlib
 endef
 
 define GCC_7_3_0_BUILD_CMDS
@@ -33,8 +34,9 @@ endef
 define GCC_7_3_0_INSTALL_TARGET_CMDS
 	cd $(GCC_7_3_0_DIR); \
 	cd build; \
-	[[ -z "LFSCHECK" ]] || ulimit -s 32768; SED=sed make -k check; \
-	../contrib/test_summary; \
+	[[ -z "$$LFSCHECK" ]] || ulimit -s 32768; \
+	[[ -z "$$LFSCHECK" ]] || SED=sed make -k check; \
+	[[ -z "$$LFSCHECK" ]] || ../contrib/test_summary; \
 	make install; \
 	ln -sv ../usr/bin/cpp /lib; \
 	ln -sv gcc /usr/bin/cc; \

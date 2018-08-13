@@ -23,7 +23,7 @@ define KMOD_25_INSTALL_TARGET_CMDS
 	cd $(KMOD_25_DIR); \
 	make install; \
 	for target in depmod insmod lsmod modinfo modprobe rmmod; do \
-		ln -sfv ../bin/kmod /sbin/$$target \
+		ln -sfv ../bin/kmod /sbin/$$target; \
 	done; \
 	ln -sfv kmod /bin/lsmod;
 endef

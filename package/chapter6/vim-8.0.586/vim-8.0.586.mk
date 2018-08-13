@@ -22,23 +22,11 @@ define VIM_8_0_586_INSTALL_TARGET_CMDS
 	make install; \
 	ln -sv vim /usr/bin/vi; \
 	for L in /usr/share/man/{,*/}man1/vim.1; do \
-		ln -sv vim.1 $$(dirname $L)/vi.1 \
+		ln -sv vim.1 $$(dirname $$L)/vi.1; \
 	done; \
-	ln -sv ../vim/vim80/doc /usr/share/doc/vim-8.0.586; \
+	ln -sv ../vim/vim80/doc /usr/share/doc/vim-8.0.586;
 
-	echo -e '" Begin /etc/vimrc\n \
-		" Ensure defaults are set before customizing settings, not after\n \
-		source $$VIMRUNTIME/defaults.vim\n \
-		let skip_defaults_vim=1\n \
-		set nocompatible\n \
-		set backspace=2\n \
-		set mouse=\n \
-		syntax on\n \
-		if (&term == "xterm") || (&term == "putty")\n \
-			set background=dark\n \
-		endif\n \
-		" End /etc/vimrc' > /etc/vimrc
-
+	cp $(CATFILES)/chapter6/etc-vimrc /etc/vimrc
 
 endef
 

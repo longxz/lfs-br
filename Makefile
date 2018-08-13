@@ -1,13 +1,19 @@
 
 # common
 empty :=
+LFSCHECK := 
 
+export LFSCHECK :=
 # CHAPTER
 CHAPTER := 5
+
+ROOTDIR := $(dir $(lastword $(MAKEFILE_LIST)))
+CATFILES := $(dir $(lastword $(MAKEFILE_LIST)))/catfiles
 
 LFS := /mnt/lfs
 LFS-SRC := $(LFS)/sources
 BUILD_DIR:=$(LFS)/sources
+
 
 ifeq ($(CHAPTER),6)
 LFS := $(empty)
@@ -24,6 +30,7 @@ endif
 $(info $(LFS))
 $(info $(LFS-SRC))
 $(info $(BUILD_DIR))
+$(info $(CATFILES))
 
 # partitions
 ROOT_PART=/dev/sdb1
@@ -41,6 +48,7 @@ test:
 	@echo "target: test..."
 	@echo "LFS: $$LFS"
 	@echo "LFS_TGT: $$LFS_TGT"
+	[[ -z $LFSCHECK ]] || echo "LFSCHECK true"
 
 # chapter1-4, su, as root
 chapter1:
@@ -292,7 +300,7 @@ include package/chapter6/Python-3.6.4/Python-3.6.4.mk
 include package/chapter6/ninja-1.8.2/ninja-1.8.2.mk
 include package/chapter6/meson-0.44.0/meson-0.44.0.mk
 include package/chapter6/procps-ng-3.3.12/procps-ng-3.3.12.mk
-include package/chapter6/elfutils-0.170/elfutils-0.170.mk
+include package/chapter6/e2fsprogs-1.43.9/e2fsprogs-1.43.9.mk
 include package/chapter6/coreutils-8.29/coreutils-8.29.mk
 include package/chapter6/check-0.12.0/check-0.12.0.mk
 include package/chapter6/diffutils-3.6/diffutils-3.6.mk

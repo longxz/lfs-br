@@ -7,7 +7,7 @@ endef
 
 define GROFF_1_22_3_CONFIGURE_CMDS
 	cd $(GROFF_1_22_3_DIR); \
-	PAGE=<paper_size> ./configure --prefix=/usr
+	PAGE=letter ./configure --prefix=/usr
 endef
 
 define GROFF_1_22_3_BUILD_CMDS

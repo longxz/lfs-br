@@ -24,14 +24,14 @@ endef
 define BINUTILS_2_30_BUILD_CMDS
 	cd $(BINUTILS_2_30_DIR); \
 	cd build; \
-	make  tooldir=/usr
+	make tooldir=/usr
 endef
 
 define BINUTILS_2_30_INSTALL_TARGET_CMDS
 	cd $(BINUTILS_2_30_DIR); \
 	cd build; \
 	[[ -z "$$LFSCHECK" ]] || make -k check; \
-	make  tooldir=/usr install
+	make tooldir=/usr install
 endef
 
 $(eval $(gen-pkg-name))

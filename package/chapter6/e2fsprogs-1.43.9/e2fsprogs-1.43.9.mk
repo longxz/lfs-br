@@ -6,13 +6,13 @@ define E2FSPROGS_1_43_9_SOURCE_CMDS
 endef
 
 define E2FSPROGS_1_43_9_CONFIGURE_CMDS
-	cd $(E2FSPROGS_1_43_9_DIR); 
+	cd $(E2FSPROGS_1_43_9_DIR); \
 	mkdir -v build; \
-	cd build;
+	cd build; \
 	LIBS=-L/tools/lib \
 	CFLAGS=-I/tools/include \
 	PKG_CONFIG_PATH=/tools/lib/pkgconfig \
-		../configure --prefix=/usr \
+	../configure --prefix=/usr \
 		--bindir=/bin \
 		--with-root-prefix="" \
 		--enable-elf-shlibs \
@@ -23,11 +23,14 @@ define E2FSPROGS_1_43_9_CONFIGURE_CMDS
 endef
 
 define E2FSPROGS_1_43_9_BUILD_CMDS
-	make -C $(E2FSPROGS_1_43_9_DIR)
+	cd $(E2FSPROGS_1_43_9_DIR); \
+	cd build; \
+	make
 endef
 
 define E2FSPROGS_1_43_9_INSTALL_TARGET_CMDS
 	cd $(E2FSPROGS_1_43_9_DIR); \
+	cd build; \
 	ln -sfv /tools/lib/lib{blk,uu}id.so.1 lib; \
 	[[ -z "$$LFSCHECK" ]] || make LD_LIBRARY_PATH=/tools/lib check; \
 	make install; \

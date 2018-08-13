@@ -6,11 +6,9 @@ define EUDEV_3_2_5_SOURCE_CMDS
 endef
 
 define EUDEV_3_2_5_CONFIGURE_CMDS
+	cp $(CATFILES)/chapter6/config.cache $(EUDEV_3_2_5_DIR)/config.cache; \
 	cd $(EUDEV_3_2_5_DIR); \
 	sed -r -i 's|/usr(/bin/test)|\1|' test/udev-test.pl; \
-
-	echo 'HAVE_BLKID=1\nBLKID_LIBS="-lblkid"\n`BLKID_CFLAGS="-I/tools/include"' > config.cache
-
 	./configure --prefix=/usr \
 		--bindir=/sbin \
 		--sbindir=/sbin \
@@ -33,7 +31,7 @@ define EUDEV_3_2_5_INSTALL_TARGET_CMDS
 	cd $(EUDEV_3_2_5_DIR); \
 	mkdir -pv /lib/udev/rules.d; \
 	mkdir -pv /etc/udev/rules.d; \
-	make LD_LIBRARY_PATH=/tools/lib check; \
+	[[ -z "$$LFSCHECK" ]] || make LD_LIBRARY_PATH=/tools/lib check; \
 	make LD_LIBRARY_PATH=/tools/lib install; \
 	tar -xvf ../udev-lfs-20171102.tar.bz2; \
 	make -f udev-lfs-20171102/Makefile.lfs install; \
