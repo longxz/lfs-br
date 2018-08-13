@@ -1,32 +1,13 @@
-# declare before package include scripts/generic-package.mk
 
-ROOT_PART=/dev/sdb1
-SWAP_PART=/dev/sdb2
-
+# common
 empty :=
+
+# CHAPTER
+CHAPTER := 5
+
 LFS := /mnt/lfs
 LFS-SRC := $(LFS)/sources
 BUILD_DIR:=$(LFS)/sources
-LFSCHECK := 
-PACKAGES :=
-PACKAGES_ALL :=
-
-CHAPTER := 5
-
-ifeq ($(CHAPTER),D5)
-$(info $(LFS))
-$(info $(LFS-SRC))
-$(info $(BUILD_DIR))
-endif
-
-ifeq ($(CHAPTER),D6)
-LFS := $(empty)
-LFS-SRC := /sources.ch6
-BUILD_DIR := /sources.ch6
-$(info $(LFS))
-$(info $(LFS-SRC))
-$(info $(BUILD_DIR))
-endif
 
 ifeq ($(CHAPTER),6)
 LFS := $(empty)
@@ -34,12 +15,25 @@ LFS-SRC := /sources.ch6
 BUILD_DIR := /sources.ch6
 endif
 
+$(info $(LFS))
+$(info $(LFS-SRC))
+$(info $(BUILD_DIR))
+
+# partitions
+ROOT_PART=/dev/sdb1
+SWAP_PART=/dev/sdb2
+
+# packages
+PACKAGES :=
+PACKAGES_ALL :=
+
 include scripts/utils.mk
 include scripts/pkg-utils.mk
 include scripts/pkg-generic.mk
 
 test:
 	@echo "target: test..."
+	@echo "LFS: $$LFS"
 	@echo "LFS_TGT: $$LFS_TGT"
 
 chapter1:
@@ -55,7 +49,7 @@ chapter2.2:
 	
 chapter2.4:
 	@echo "target: chapter2.4..."
-	@echo "Please create partitions manually!!!" | tee -a .chapter2.log
+	@echo "Please create partitions manually!!!"
 
 chapter2.5:
 	@echo "target: chapter2.5..."
@@ -97,11 +91,11 @@ chapter4:
 	-sudo passwd lfs  | tee -a .chapter4.log
 	-sudo chown -v lfs $(LFS)/tools  | tee -a .chapter4.log
 	-sudo chown -v lfs $(LFS)/sources | tee -a .chapter4.log
+	-sudo cp ./catfiles/chapter4/bashrc ~/.bashrc
+	-sudo cp ./catfiles/chapter4/bash_profile ~/.bash_profile
 
-	echo "Please su - lfs, and create bash_profile and bashrc !!!" | tee -a .chapter4.log
-
-chapter6:
-	@echo "target: chapter6..."
+chapter6.2:
+	@echo "target: chapter6.2 ..."
 	-sudo mkdir -pv $$LFS/{dev,proc,sys,run}
 	-sudo mknod -m 600 $$LFS/dev/console c 5 1
 	-sudo mknod -m 666 $$LFS/dev/null c 1 3
@@ -114,7 +108,74 @@ chapter6:
  		mkdir -pv $$LFS/$$(readlink $$LFS/dev/shm); \
 	fi;\
 
-	echo "Please chroot and config !!!" | tee -a .chapter6.log
+chapter6.4:
+# chroot "$LFS" /tools/bin/env -i \
+# 	HOME=/root \
+# 	TERM="$TERM" \
+# 	PS1='(lfs chroot) \u:\w\$ ' \
+# 	PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin \
+# 	/tools/bin/bash --login +h
+	@echo "target: chapter6.4 ..."
+	@echo "Please chroot !!!"
+
+chapter6.5:
+	@echo "target: chapter6.5 ..."
+	-mkdir -pv /{bin,boot,etc/{opt,sysconfig},home,lib/firmware,mnt,opt}
+	-mkdir -pv /{media/{floppy,cdrom},sbin,srv,var}
+	-install -dv -m 0750 /root
+	-install -dv -m 1777 /tmp /var/tmp
+	-mkdir -pv /usr/{,local/}{bin,include,lib,sbin,src}
+	-mkdir -pv /usr/{,local/}share/{color,dict,doc,info,locale,man}
+	-mkdir -v /usr/{,local/}share/{misc,terminfo,zoneinfo}
+	-mkdir -v /usr/libexec
+	-mkdir -pv /usr/{,local/}share/man/man{1..8}
+	case $(uname -m) in \
+	 x86_64) mkdir -v /lib64 ;; \
+	esac
+	-mkdir -v /var/{log,mail,spool}
+	-ln -sv /run /var/run
+	-ln -sv /run/lock /var/lock
+	-mkdir -pv /var/{opt,cache,lib/{color,misc,locate},local}
+
+chapter6.6:
+	@echo "target: chapter6.6 ..."
+	-ln -sv /tools/bin/{bash,cat,dd,echo,ln,pwd,rm,stty} /bin
+	-ln -sv /tools/bin/{install,perl} /usr/bin
+	-ln -sv /tools/lib/libgcc_s.so{,.1} /usr/lib
+	-ln -sv /tools/lib/libstdc++.{a,so{,.6}} /usr/lib
+	-ln -sv bash /bin/sh
+	-ln -sv /proc/self/mounts /etc/mtab
+	-sudo cp ./catfiles/chapter6/passwd /etc/passwd
+	-sudo cp ./catfiles/chapter6/group /etc/group
+
+	exec /tools/bin/bash --login +h
+
+	-touch /var/log/{btmp,lastlog,faillog,wtmp}
+	-chgrp -v utmp /var/log/lastlog
+	-chmod -v 664 /var/log/lastlog
+	-chmod -v 600 /var/log/btmp
+
+chapter7:
+	@echo "target: chapter7 ..."
+	-cp ./catfiles/chapter7/etc-udev-rules.d-83-duplicate_devs.rules /etc/udev/rules.d/83-duplicate_devs.rules
+	-cp ./catfiles/chapter7/etc-sysconfig-ifconfig.eth0	/etc/sysconfig/ifconfig.eth0
+	-cp ./catfiles/chapter7/etc-resolv.conf /etc/resolv.conf
+	-cp ./catfiles/chapter7/etc-hosts /etc/hosts
+	-cp ./catfiles/chapter7/etc-inittab /etc/inittab
+	-cp ./catfiles/chapter7/etc-sysconfig-clock /etc/sysconfig/clock
+	-cp ./catfiles/chapter7/etc-sysconfig-console /etc/sysconfig/console
+	-cp ./catfiles/chapter7/etc-profile /etc/profile
+	-cp ./catfiles/chapter7/etc-inputrc /etc/inputrc
+	-cp ./catfiles/chapter7/etc-shells /etc/shells
+
+chapter8:
+	@echo "target: chapter8 ..."
+	-cp ./catfiles/chapter8/etc-fstab /etc/fstab
+	-cp ./catfiles/chapter8/etc-modprobe.d-usb.conf /etc/modprobe.d/usb.conf
+	-cp ./catfiles/chapter8/boot-grub-grub.cfg /boot/grub/grub.cfg
+chapter9:
+	@echo "target: chapter9 ..."
+	-cp ./catfiles/chapter9/etc-lsb-release /etc/lsb-release
 
 ifeq ($(CHAPTER),D5)
 include package/chapter5/binutils-2.30/binutils-2.30.mk
@@ -160,8 +221,6 @@ include package/chapter6/linux-4.15.3/linux-4.15.3.mk
 endif
 
 # entering chroot
-# Mounting and Populating /dev
-# Mounting Virtual Kernel File Systems
 ifeq ($(CHAPTER),6)
 include package/chapter6/linux-4.15.3/linux-4.15.3.mk
 include package/chapter6/man-pages-4.15/man-pages-4.15.mk

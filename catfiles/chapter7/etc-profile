@@ -1,0 +1,3 @@
+# Begin /etc/profile
+export LANG=<ll>_<CC>.<charmap><@modifiers>
+# End /etc/profile
