@@ -15,6 +15,12 @@ LFS-SRC := /sources.ch6
 BUILD_DIR := /sources.ch6
 endif
 
+ifeq ($(CHAPTER),D6)
+LFS := $(empty)
+LFS-SRC := /sources.ch6
+BUILD_DIR := /sources.ch6
+endif
+
 $(info $(LFS))
 $(info $(LFS-SRC))
 $(info $(BUILD_DIR))
@@ -64,6 +70,7 @@ chapter2.6:
 	LFS=/mnt/lfs; mkdir -pv $$LFS
 	echo "$(ROOT_PART) /mnt/lfs ext4 defaults 1 1" >> /etc/fstab
 	/sbin/swapon -v $(SWAP_PART)
+	@echo "Important !!! : Please mount $(ROOT_PART)"
 	@echo "Important !!! : Please source ~/.bashrc !!!"
 
 chapter3:
@@ -108,6 +115,7 @@ chapter5.36:
 	@echo "target: chapter5.36 ..."
 	chown -R root:root $(LFS)/tools
 
+# su, as root
 chapter6.2:
 	@echo "target: chapter6.2 ..."
 	-mkdir -pv $$LFS/{dev,proc,sys,run}
@@ -132,42 +140,44 @@ chapter6.4:
 	@echo "target: chapter6.4 ..."
 	@echo "Please chroot !!!"
 
+# manually
 chapter6.5:
 	@echo "target: chapter6.5 ..."
-	-mkdir -pv /{bin,boot,etc/{opt,sysconfig},home,lib/firmware,mnt,opt}
-	-mkdir -pv /{media/{floppy,cdrom},sbin,srv,var}
-	-install -dv -m 0750 /root
-	-install -dv -m 1777 /tmp /var/tmp
-	-mkdir -pv /usr/{,local/}{bin,include,lib,sbin,src}
-	-mkdir -pv /usr/{,local/}share/{color,dict,doc,info,locale,man}
-	-mkdir -v /usr/{,local/}share/{misc,terminfo,zoneinfo}
-	-mkdir -v /usr/libexec
-	-mkdir -pv /usr/{,local/}share/man/man{1..8}
+	mkdir -pv /{bin,boot,etc/{opt,sysconfig},home,lib/firmware,mnt,opt}
+	mkdir -pv /{media/{floppy,cdrom},sbin,srv,var}
+	install -dv -m 0750 /root
+	install -dv -m 1777 /tmp /var/tmp
+	mkdir -pv /usr/{,local/}{bin,include,lib,sbin,src}
+	mkdir -pv /usr/{,local/}share/{color,dict,doc,info,locale,man}
+	mkdir -v /usr/{,local/}share/{misc,terminfo,zoneinfo}
+	mkdir -v /usr/libexec
+	mkdir -pv /usr/{,local/}share/man/man{1..8}
 	case $(uname -m) in \
 	 x86_64) mkdir -v /lib64 ;; \
 	esac
-	-mkdir -v /var/{log,mail,spool}
-	-ln -sv /run /var/run
-	-ln -sv /run/lock /var/lock
-	-mkdir -pv /var/{opt,cache,lib/{color,misc,locate},local}
+	mkdir -v /var/{log,mail,spool}
+	ln -sv /run /var/run
+	ln -sv /run/lock /var/lock
+	mkdir -pv /var/{opt,cache,lib/{color,misc,locate},local}
 
+# manually
 chapter6.6:
 	@echo "target: chapter6.6 ..."
-	-ln -sv /tools/bin/{bash,cat,dd,echo,ln,pwd,rm,stty} /bin
-	-ln -sv /tools/bin/{install,perl} /usr/bin
-	-ln -sv /tools/lib/libgcc_s.so{,.1} /usr/lib
-	-ln -sv /tools/lib/libstdc++.{a,so{,.6}} /usr/lib
-	-ln -sv bash /bin/sh
-	-ln -sv /proc/self/mounts /etc/mtab
-	-cp ./catfiles/chapter6/passwd /etc/passwd
-	-cp ./catfiles/chapter6/group /etc/group
+	ln -sv /tools/bin/{bash,cat,dd,echo,ln,pwd,rm,stty} /bin
+	ln -sv /tools/bin/{install,perl} /usr/bin
+	ln -sv /tools/lib/libgcc_s.so{,.1} /usr/lib
+	ln -sv /tools/lib/libstdc++.{a,so{,.6}} /usr/lib
+	ln -sv bash /bin/sh
+	ln -sv /proc/self/mounts /etc/mtab
+	cp ./catfiles/chapter6/etc-passwd /etc/passwd
+	cp ./catfiles/chapter6/etc-group /etc/group
 
 	exec /tools/bin/bash --login +h
 
-	-touch /var/log/{btmp,lastlog,faillog,wtmp}
-	-chgrp -v utmp /var/log/lastlog
-	-chmod -v 664 /var/log/lastlog
-	-chmod -v 600 /var/log/btmp
+	touch /var/log/{btmp,lastlog,faillog,wtmp}
+	chgrp -v utmp /var/log/lastlog
+	chmod -v 664 /var/log/lastlog
+	chmod -v 600 /var/log/btmp
 
 chapter7:
 	@echo "target: chapter7 ..."

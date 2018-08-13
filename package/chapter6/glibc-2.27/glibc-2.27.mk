@@ -23,7 +23,7 @@ define GLIBC_2_27_CONFIGURE_CMDS
 	rm -f /usr/include/limits.h; \
 	mkdir -v build; \
 	cd build; \
-	CC="gcc -isystem $$GCC_INCDIR -isystem /usr/include"; \
+	CC="gcc -isystem $$GCC_INCDIR -isystem /usr/include" \
 	../configure --prefix=/usr \
 		--disable-werror \
 		--enable-kernel=3.2 \
@@ -73,10 +73,10 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 
 	# Configuring Glibc
 	cd $(GLIBC_2_27_DIR); \
-	echo "# Begin /etc/nsswitch.conf\npasswd: files" >> /etc/nsswitch.conf; \
+	echo "# Begin /etc/nsswitch.conf\npasswd: files" > /etc/nsswitch.conf; \
 	echo -e "group: files\nshadow: files\n\nhosts: files dns\n\networks: files\n\n" >> /etc/nsswitch.conf \
 	echo -e "protocols: files\nservices: files\nethers: files\nrpc: files\n\n" >> /etc/nsswitch.conf \
-	echo "# End /etc/nsswitch.conf'	>> /etc/nsswitch.conf
+	echo "# End /etc/nsswitch.conf"	>> /etc/nsswitch.conf
 
 	cd $(GLIBC_2_27_DIR); \
 	tar -xf ../../tzdata2018c.tar.gz; \
@@ -95,7 +95,7 @@ define GLIBC_2_27_INSTALL_TARGET_CMDS
 	cd $(GLIBC_2_27_DIR); \
 	tzselect; \
 	cp -v /usr/share/zoneinfo/<xxx> /etc/localtime; \
-	echo "# Begin /etc/ld.so.conf" >> /etc/ld.so.conf; \
+	echo "# Begin /etc/ld.so.conf" > /etc/ld.so.conf; \
 	echo "/usr/local/lib\n/opt/lib" >> /etc/ld.so.conf; \
 	echo "# Add an include directory" >> /etc/ld.so.conf; \
 	echo "include /etc/ld.so.conf.d/*.conf" >> /etc/ld.so.conf; \
