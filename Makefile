@@ -36,6 +36,7 @@ test:
 	@echo "LFS: $$LFS"
 	@echo "LFS_TGT: $$LFS_TGT"
 
+# chapter1-4, su, as root
 chapter1:
 	@echo "target: chapter1..."
 	@echo "Just Introduction" | tee -a .chapter1.log
@@ -43,67 +44,80 @@ chapter1:
 # sudo apt install -y build-essential
 chapter2.2:
 	@echo "target: chapter2.2..."
-	sudo apt-get install -y binutils bison m4 texinfo xz-utils gawk gcc g++ | tee -a .chapter2.log
-	sudo ln -fs /bin/bash /bin/sh | tee -a .chapter2.log
+	apt-get install -y binutils bison m4 texinfo xz-utils gawk gcc g++ | tee -a .chapter2.log
+	ln -fs /bin/bash /bin/sh | tee -a .chapter2.log
 	bash version-check.sh | tee -a .chapter2.log
 	
 chapter2.4:
 	@echo "target: chapter2.4..."
 	@echo "Please create partitions manually!!!"
+	@echo "example: cfdisk /dev/sdb"
 
 chapter2.5:
 	@echo "target: chapter2.5..."
-	sudo mkfs -v -t ext4 $(ROOT_PART)
-	sudo mkswap $(SWAP_PART)
+	mkfs -v -t ext4 $(ROOT_PART)
+	mkswap $(SWAP_PART)
 
-#source ~/.bashrc
 chapter2.6:
 	@echo "target: chapter2.6..."
 	@echo "export LFS=/mnt/lfs" >> ~/.bashrc
-	LFS=/mnt/lfs; sudo mkdir -pv $$LFS
+	LFS=/mnt/lfs; mkdir -pv $$LFS
 	echo "$(ROOT_PART) /mnt/lfs ext4 defaults 1 1" >> /etc/fstab
-	sudo /sbin/swapon -v $(SWAP_PART)
+	/sbin/swapon -v $(SWAP_PART)
+	@echo "Important !!! : Please source ~/.bashrc !!!"
 
-# cp source.tar
 chapter3:
 	@echo "target: chapter3..."
 	@if [ ! -f ../sources.tar.gz ]; then echo "Please prepare sources package!!!"; exit 1; fi 
-	sudo mkdir -pv $(LFS)/sources | tee -a .chapter3.log
-	sudo chmod -v a+wt $(LFS)/sources | tee -a .chapter3.log
-	sudo tar xf ../sources.tar.gz -C $(LFS) | tee -a .chapter3.log
+	mkdir -pv $(LFS)/sources | tee -a .chapter3.log
+	chmod -v a+wt $(LFS)/sources | tee -a .chapter3.log
+	tar xf ../sources.tar.gz -C $(LFS) | tee -a .chapter3.log
+	cp md5sums $(LFS)/sources
 	pushd $(LFS)/sources; \
 	md5sum -c md5sums | tee -a .chapter3.log; \
 	popd;
 
-	sudo mkdir -pv $(LFS)/sources.ch6 | tee -a .chapter3.log
-	sudo chmod -v a+wt $(LFS)/sources.ch6 | tee -a .chapter3.log
-	sudo tar xf ../sources.tar.gz --strip-components=1 -C $(LFS)/sources.ch6 | tee -a .chapter3.log
+	mkdir -pv $(LFS)/sources.ch6 | tee -a .chapter3.log
+	chmod -v a+wt $(LFS)/sources.ch6 | tee -a .chapter3.log
+	tar xf ../sources.tar.gz --strip-components=1 -C $(LFS)/sources.ch6 | tee -a .chapter3.log
+	cp md5sums $(LFS)/sources.ch6
 	pushd $(LFS)/sources.ch6; \
 	md5sum -c md5sums | tee -a .chapter3.log; \
 	popd;
 
 chapter4:
 	@echo "target: chapter4..."
-	@sudo mkdir -pv $(LFS)/tools  | tee -a .chapter4.log
-	-sudo ln -sv $(LFS)/tools /  | tee -a .chapter4.log
-	-sudo groupadd lfs  | tee -a .chapter4.log
-	-sudo useradd -s /bin/bash -g lfs -m -k /dev/null lfs  | tee -a .chapter4.log
-	-sudo passwd lfs  | tee -a .chapter4.log
-	-sudo chown -v lfs $(LFS)/tools  | tee -a .chapter4.log
-	-sudo chown -v lfs $(LFS)/sources | tee -a .chapter4.log
-	-sudo cp ./catfiles/chapter4/bashrc ~/.bashrc
-	-sudo cp ./catfiles/chapter4/bash_profile ~/.bash_profile
+	@mkdir -pv $(LFS)/tools  | tee -a .chapter4.log
+	-ln -sv $(LFS)/tools /  | tee -a .chapter4.log
+	-groupadd lfs  | tee -a .chapter4.log
+	-useradd -s /bin/bash -g lfs -m -k /dev/null lfs  | tee -a .chapter4.log
+	-passwd lfs  | tee -a .chapter4.log
+	-chown -v lfs $(LFS)/tools  | tee -a .chapter4.log
+	-chown -v lfs $(LFS)/sources | tee -a .chapter4.log
+	@echo "Important !!! : Please su - lfs"
+
+# su - lfs
+chapter4.4:
+	@echo "target: chapter4.4..."
+	-cp ./catfiles/chapter4/bashrc ~/.bashrc
+	-cp ./catfiles/chapter4/bash_profile ~/.bash_profile
+	@echo "Important !!! : Please source ~/.bashrc"
+
+# su, as root
+chapter5.36:
+	@echo "target: chapter5.36 ..."
+	chown -R root:root $(LFS)/tools
 
 chapter6.2:
 	@echo "target: chapter6.2 ..."
-	-sudo mkdir -pv $$LFS/{dev,proc,sys,run}
-	-sudo mknod -m 600 $$LFS/dev/console c 5 1
-	-sudo mknod -m 666 $$LFS/dev/null c 1 3
-	-sudo mount -v --bind /dev $$LFS/dev
-	-sudo mount -vt devpts devpts $$LFS/dev/pts -o gid=5,mode=620
-	-sudo mount -vt proc proc $$LFS/proc
-	-sudo mount -vt sysfs sysfs $$LFS/sys
-	-sudo mount -vt tmpfs tmpfs $$LFS/run
+	-mkdir -pv $$LFS/{dev,proc,sys,run}
+	-mknod -m 600 $$LFS/dev/console c 5 1
+	-mknod -m 666 $$LFS/dev/null c 1 3
+	-mount -v --bind /dev $$LFS/dev
+	-mount -vt devpts devpts $$LFS/dev/pts -o gid=5,mode=620
+	-mount -vt proc proc $$LFS/proc
+	-mount -vt sysfs sysfs $$LFS/sys
+	-mount -vt tmpfs tmpfs $$LFS/run
 	if [ -h $$LFS/dev/shm ]; then \
  		mkdir -pv $$LFS/$$(readlink $$LFS/dev/shm); \
 	fi;\
@@ -145,8 +159,8 @@ chapter6.6:
 	-ln -sv /tools/lib/libstdc++.{a,so{,.6}} /usr/lib
 	-ln -sv bash /bin/sh
 	-ln -sv /proc/self/mounts /etc/mtab
-	-sudo cp ./catfiles/chapter6/passwd /etc/passwd
-	-sudo cp ./catfiles/chapter6/group /etc/group
+	-cp ./catfiles/chapter6/passwd /etc/passwd
+	-cp ./catfiles/chapter6/group /etc/group
 
 	exec /tools/bin/bash --login +h
 
