@@ -7,7 +7,7 @@ endef
 
 define INETUTILS_1_9_4_CONFIGURE_CMDS
 	cd $(INETUTILS_1_9_4_DIR); \
-	patch -p1 < $(ROOTDIR)/patches/inetutils-1.9.4-ifconfig-system-linux-c.patch
+	patch -p1 < $(PATCHFILES)/inetutils-1.9-PATH_PROCNET_DEV.patch
 	./configure --prefix=/usr \
 		--localstatedir=/var \
 		--disable-logger \

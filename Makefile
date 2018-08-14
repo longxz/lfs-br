@@ -7,8 +7,10 @@ export LFSCHECK :=
 # CHAPTER
 CHAPTER := 5
 
-ROOTDIR := $(dir $(lastword $(MAKEFILE_LIST)))
-CATFILES := $(dir $(lastword $(MAKEFILE_LIST)))/catfiles
+ROOTDIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+PATCHFILES := $(ROOTDIR)/patches
+CATFILES := $(ROOTDIR)/catfiles
+BOOKFILES := $(ROOTDIR)/book
 
 LFS := /mnt/lfs
 LFS-SRC := $(LFS)/sources
@@ -114,8 +116,8 @@ chapter4:
 # su - lfs
 chapter4.4:
 	@echo "target: chapter4.4..."
-	-cp ./catfiles/chapter4/bashrc ~/.bashrc
-	-cp ./catfiles/chapter4/bash_profile ~/.bash_profile
+	-cp $(CATFILES)/chapter4/bashrc ~/.bashrc
+	-cp $(CATFILES)/chapter4/bash_profile ~/.bash_profile
 	@echo "Important !!! : Please source ~/.bashrc"
 
 # su, as root
@@ -177,8 +179,8 @@ chapter6.6:
 	ln -sv /tools/lib/libstdc++.{a,so{,.6}} /usr/lib
 	ln -sv bash /bin/sh
 	ln -sv /proc/self/mounts /etc/mtab
-	cp ./catfiles/chapter6/etc-passwd /etc/passwd
-	cp ./catfiles/chapter6/etc-group /etc/group
+	cp $(CATFILES)/chapter6/etc-passwd /etc/passwd
+	cp $(CATFILES)/chapter6/etc-group /etc/group
 
 	exec /tools/bin/bash --login +h
 
@@ -189,25 +191,56 @@ chapter6.6:
 
 chapter7:
 	@echo "target: chapter7 ..."
-	-cp ./catfiles/chapter7/etc-udev-rules.d-83-duplicate_devs.rules /etc/udev/rules.d/83-duplicate_devs.rules
-	-cp ./catfiles/chapter7/etc-sysconfig-ifconfig.eth0	/etc/sysconfig/ifconfig.eth0
-	-cp ./catfiles/chapter7/etc-resolv.conf /etc/resolv.conf
-	-cp ./catfiles/chapter7/etc-hosts /etc/hosts
-	-cp ./catfiles/chapter7/etc-inittab /etc/inittab
-	-cp ./catfiles/chapter7/etc-sysconfig-clock /etc/sysconfig/clock
-	-cp ./catfiles/chapter7/etc-sysconfig-console /etc/sysconfig/console
-	-cp ./catfiles/chapter7/etc-profile /etc/profile
-	-cp ./catfiles/chapter7/etc-inputrc /etc/inputrc
-	-cp ./catfiles/chapter7/etc-shells /etc/shells
+	mkdir -pv /sources.ch7
+	-cp $(BOOKFILES)/lfs-bootscripts-20170626.tar.bz2 /sources.ch7
+	cd /sources.ch7; tar xf lfs-bootscripts-20170626.tar.bz2
+	cd /sources.ch7/lfs-bootscripts-20170626; make install
+	-bash /lib/udev/init-net-rules.sh
+	-cat /etc/udev/rules.d/70-persistent-net.rules
+	-udevadm test /sys/block/hdd
+	sed -i -e 's/"write_cd_rules"/"write_cd_rules mode"/' /etc/udev/rules.d/83-cdrom-symlinks.rules
+	-udevadm info -a -p /sys/class/video4linux/video0
+
+	-cp $(CATFILES)/chapter7/etc-udev-rules.d-83-duplicate_devs.rules /etc/udev/rules.d/83-duplicate_devs.rules
+	-cp $(CATFILES)/chapter7/etc-sysconfig-ifconfig.eth0	/etc/sysconfig/ifconfig.eth0
+	-cp $(CATFILES)/chapter7/etc-resolv.conf /etc/resolv.conf
+	-cp $(CATFILES)/chapter7/etc-hosts /etc/hosts
+	-cp $(CATFILES)/chapter7/etc-inittab /etc/inittab
+	-cp $(CATFILES)/chapter7/etc-sysconfig-clock /etc/sysconfig/clock
+	-cp $(CATFILES)/chapter7/etc-sysconfig-console /etc/sysconfig/console
+	-cp $(CATFILES)/chapter7/etc-profile /etc/profile
+	locale -a
+	LC_ALL=en_GB.iso88591 locale charmap
+	LC_ALL=en_GB.iso88591 locale charmap
+	LC_ALL=en_GB.iso88591 locale language
+	LC_ALL=en_GB.iso88591 locale charmap
+	LC_ALL=en_GB.iso88591 locale int_curr_symbol
+	LC_ALL=en_GB.iso88591 locale int_prefix
+	-cp $(CATFILES)/chapter7/etc-inputrc /etc/inputrc
+	-cp $(CATFILES)/chapter7/etc-shells /etc/shells
 
 chapter8:
 	@echo "target: chapter8 ..."
-	-cp ./catfiles/chapter8/etc-fstab /etc/fstab
-	-cp ./catfiles/chapter8/etc-modprobe.d-usb.conf /etc/modprobe.d/usb.conf
-	-cp ./catfiles/chapter8/boot-grub-grub.cfg /boot/grub/grub.cfg
+	-cp $(CATFILES)/chapter8/etc-fstab /etc/fstab
+	mkdir -pv /sources.ch8
+	-cp /sources/linux-4.15.3.tar.xz /sources.ch8
+	cd /sources.ch8; \
+	tar xf linux-4.15.3.tar.xz; \
+	cd linux-4.15.3; \
+	make mrproper; \
+	cp $(CATFILES)/chapter8/kernel-config ./.config; \
+	make && make modules_install; \
+	cp -iv arch/x86/boot/bzImage /boot/vmlinuz-4.15.3-lfs-8.2; \
+	cp -iv System.map /boot/System.map-4.15.3; \
+	cp -iv .config /boot/config-4.15.3; \
+	install -d /usr/share/doc/linux-4.15.3; \
+	cp -r Documentation/* /usr/share/doc/linux-4.15.3
+	-cp $(CATFILES)/chapter8/etc-modprobe.d-usb.conf /etc/modprobe.d/usb.conf
+	mkdir -pv /boot/grub
+	-cp $(CATFILES)/chapter8/boot-grub-grub.cfg /boot/grub/grub.cfg
 chapter9:
 	@echo "target: chapter9 ..."
-	-cp ./catfiles/chapter9/etc-lsb-release /etc/lsb-release
+	-cp $(CATFILES)/chapter9/etc-lsb-release /etc/lsb-release
 
 ifeq ($(CHAPTER),D5)
 include package/chapter5/binutils-2.30/binutils-2.30.mk
